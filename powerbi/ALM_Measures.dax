@@ -1,0 +1,79 @@
+-- Import the CSV extracts from artifacts/results and data/demo, then create these measures.
+
+Total Assets TRY mn =
+CALCULATE(
+    SUM(positions[balance_try_mn]),
+    positions[side] = "asset"
+)
+
+Total Liabilities TRY mn =
+CALCULATE(
+    SUM(positions[balance_try_mn]),
+    positions[side] = "liability"
+)
+
+Tier 1 Capital TRY mn =
+CALCULATE(
+    SUM(positions[balance_try_mn]),
+    positions[side] = "equity"
+)
+
+Deposits TRY mn =
+CALCULATE(
+    SUM(positions[balance_try_mn]),
+    positions[product] IN {"demand_deposits", "term_deposits"}
+)
+
+Worst Delta EVE TRY mn =
+MINX(
+    FILTER(eve, eve[currency] = "TOTAL"),
+    eve[delta_eve_try_mn]
+)
+
+Worst Delta EVE Tier 1 % =
+MINX(
+    FILTER(eve, eve[currency] = "TOTAL"),
+    eve[delta_eve_tier1_pct]
+) / 100
+
+Worst Delta NII TRY mn =
+MIN(nii[delta_nii_try_mn])
+
+Worst Delta NII % =
+MIN(nii[delta_nii_pct]) / 100
+
+Base LCR Proxy % =
+CALCULATE(
+    MAX(liquidity[lcr_proxy_pct]),
+    liquidity[scenario] = "base"
+) / 100
+
+Combined LCR Proxy % =
+CALCULATE(
+    MAX(liquidity[lcr_proxy_pct]),
+    liquidity[scenario] = "combined"
+) / 100
+
+NSFR Proxy % =
+MAX(liquidity[nsfr_proxy_pct]) / 100
+
+FX Open Position TRY mn =
+SUMX(fx, ABS(fx[net_open_position_try_mn]))
+
+FX Open Position Tier 1 % =
+DIVIDE([FX Open Position TRY mn], [Tier 1 Capital TRY mn])
+
+Open Limit Breaches =
+CALCULATE(
+    COUNTROWS(risk_limit_controls),
+    risk_limit_controls[status] = "BREACH"
+)
+
+Risk Signal =
+SWITCH(
+    TRUE(),
+    [Open Limit Breaches] > 0, "RED",
+    [Combined LCR Proxy %] < 1.00, "AMBER",
+    "GREEN"
+)
+

@@ -1,0 +1,3 @@
+scenario,baseline_nii_try_mn,shocked_nii_try_mn,delta_nii_try_mn,delta_nii_pct
+parallel_up,22791.428095,24116.376992,1324.948897,5.813365
+parallel_down,22791.428095,21466.479198,-1324.948897,-5.813365

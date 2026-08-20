@@ -1,0 +1,9 @@
+limit_set: "Board-approved illustrative risk appetite - portfolio demonstration only"
+limits:
+  max_delta_eve_loss_tier1_pct: 15.0
+  max_abs_delta_nii_pct: 12.0
+  min_lcr_proxy_pct: 100.0
+  min_nsfr_proxy_pct: 100.0
+  min_combined_survival_days: 30
+  max_fx_open_position_equity_pct: 20.0
+  max_single_currency_eve_contribution_pct: 65.0

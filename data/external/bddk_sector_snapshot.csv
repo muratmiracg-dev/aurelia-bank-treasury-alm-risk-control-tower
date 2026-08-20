@@ -1,0 +1,10 @@
+period,metric,value,unit,source_name,source_url
+2026-06-30,total_assets,52727562,TRY_million,BDDK,https://www.bddk.org.tr/BultenAylik/tr/Home/HaberBulteni
+2026-06-30,total_loans,26791320,TRY_million,BDDK,https://www.bddk.org.tr/BultenAylik/tr/Home/HaberBulteni
+2026-06-30,securities,7695031,TRY_million,BDDK,https://www.bddk.org.tr/BultenAylik/tr/Home/HaberBulteni
+2026-06-30,deposits,30109453,TRY_million,BDDK,https://www.bddk.org.tr/BultenAylik/tr/Home/HaberBulteni
+2026-06-30,equity,4612495,TRY_million,BDDK,https://www.bddk.org.tr/BultenAylik/tr/Home/HaberBulteni
+2026-06-30,net_profit_ytd,527433,TRY_million,BDDK,https://www.bddk.org.tr/BultenAylik/tr/Home/HaberBulteni
+2026-06-30,capital_adequacy_ratio,16.59,percent,BDDK,https://www.bddk.org.tr/BultenAylik/tr/Home/HaberBulteni
+2026-06-30,npl_ratio,2.77,percent,BDDK,https://www.bddk.org.tr/BultenAylik/tr/Home/HaberBulteni
+

@@ -1,0 +1,3 @@
+currency,gross_open_position_try_mn,hedge_overlay_try_mn,net_open_position_try_mn,open_position_equity_pct,fx_down_20pct_pnl_try_mn,fx_down_10pct_pnl_try_mn,fx_up_10pct_pnl_try_mn,fx_up_20pct_pnl_try_mn
+EUR,-1500.000000,0.000000,-1500.000000,6.666667,300.000000,150.000000,-150.000000,-300.000000
+USD,-6000.000000,0.000000,-6000.000000,26.666667,1200.000000,600.000000,-600.000000,-1200.000000

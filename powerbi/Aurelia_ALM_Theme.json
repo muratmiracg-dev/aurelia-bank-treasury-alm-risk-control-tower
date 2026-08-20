@@ -1,0 +1,16 @@
+{
+  "name": "Aurelia Bank ALM",
+  "dataColors": ["#1F5A94", "#00A6A6", "#F4A261", "#D1495B", "#64748B", "#8B5CF6"],
+  "background": "#F7F9FC",
+  "foreground": "#0B1F33",
+  "tableAccent": "#1F5A94",
+  "good": "#00A878",
+  "neutral": "#F4A261",
+  "bad": "#D1495B",
+  "textClasses": {
+    "title": {"fontFace": "Segoe UI Semibold", "fontSize": 16, "color": "#0B1F33"},
+    "header": {"fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#0B1F33"},
+    "label": {"fontFace": "Segoe UI", "fontSize": 10, "color": "#41566B"}
+  }
+}
+

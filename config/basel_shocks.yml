@@ -1,0 +1,20 @@
+framework: "Basel Framework SRP31.90 - July 2024 recalibration"
+effective_date: "2026-01-01"
+source_url: "https://www.bis.org/bcbs/publ/d578.pdf"
+units: basis_points
+currencies:
+  TRY:
+    parallel: 400
+    short: 500
+    long: 300
+  USD:
+    parallel: 200
+    short: 300
+    long: 225
+  EUR:
+    parallel: 225
+    short: 350
+    long: 200
+post_shock_floor_pct: 0.0
+short_rate_decay_years: 4.0
+

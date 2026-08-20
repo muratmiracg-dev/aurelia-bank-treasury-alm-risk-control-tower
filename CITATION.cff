@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this educational portfolio project, please cite it as follows."
+title: "Aurelia Bank Treasury, ALM & Risk Control Tower"
+type: software
+authors:
+  - family-names: "Gedik"
+    given-names: "Murat Mirac"
+version: 1.0.0
+date-released: 2026-08-20
+license: MIT
+repository-code: "https://github.com/muratmiracg-dev/aurelia-bank-treasury-alm-risk-control-tower"
+
