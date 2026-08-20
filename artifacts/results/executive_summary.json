@@ -1,0 +1,42 @@
+{
+  "project": "Aurelia Bank Treasury, ALM & Risk Control Tower",
+  "as_of_date": "2026-08-19",
+  "reporting_currency": "TRY million",
+  "seed": 20260819,
+  "data_posture": {
+    "bank_positions": "deterministic synthetic",
+    "market_anchors": "official TCMB snapshot",
+    "sector_benchmark": "official BDDK June 2026 snapshot"
+  },
+  "balance_sheet": {
+    "assets_try_mn": 180000.0,
+    "liabilities_try_mn": 157500.0,
+    "tier1_capital_try_mn": 22500.0,
+    "deposits_try_mn": 120500.0
+  },
+  "irrbb": {
+    "baseline_eve_try_mn": 37391.194,
+    "worst_scenario": "parallel_up",
+    "worst_delta_eve_try_mn": -3092.376,
+    "worst_delta_eve_tier1_pct": -13.744,
+    "baseline_nii_try_mn": 22791.428,
+    "worst_nii_scenario": "parallel_down",
+    "worst_delta_nii_try_mn": -1324.949,
+    "worst_delta_nii_pct": -5.813
+  },
+  "liquidity": {
+    "base_lcr_proxy_pct": 158.722,
+    "combined_lcr_proxy_pct": 94.834,
+    "nsfr_proxy_pct": 143.354,
+    "combined_survival_horizon_days": 30
+  },
+  "fx": {
+    "aggregate_open_position_equity_pct": 33.333
+  },
+  "controls": {
+    "data_quality_passed": 10,
+    "data_quality_total": 10,
+    "risk_limit_breaches": 1,
+    "risk_limits_total": 7
+  }
+}

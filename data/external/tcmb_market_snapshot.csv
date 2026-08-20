@@ -1,0 +1,5 @@
+as_of_date,metric,currency,value,unit,source_name,source_url,classification
+2026-08-19,policy_rate,TRY,37.0000,percent,TCMB,https://www.tcmb.gov.tr/wps/wcm/connect/tr/tcmb+tr/main+menu/duyurular/basin/2026/duy2026-23,official_observation
+2026-08-19,fx_buying,USD,47.8467,TRY_per_unit,TCMB via e-Devlet,https://www.turkiye.gov.tr/doviz-kurlari,official_observation
+2026-08-19,fx_buying,EUR,55.5061,TRY_per_unit,TCMB via e-Devlet,https://www.turkiye.gov.tr/doviz-kurlari,official_observation
+

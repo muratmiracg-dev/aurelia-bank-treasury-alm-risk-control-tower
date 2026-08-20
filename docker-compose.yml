@@ -1,0 +1,14 @@
+services:
+  aurelia-alm-api:
+    build: .
+    environment:
+      AURELIA_PROJECT_ROOT: /app
+      AURELIA_API_KEY: ${AURELIA_API_KEY:-}
+    ports:
+      - "8000:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+

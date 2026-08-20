@@ -1,0 +1,8 @@
+control_id,control,status,observed,limit,severity
+RL01,six prescribed EVE scenarios are present,WITHIN_LIMIT,6.000000,6.000000,HIGH
+RL02,maximum EVE decline / Tier 1,WITHIN_LIMIT,13.743894,15.000000,HIGH
+RL03,absolute delta NII,WITHIN_LIMIT,5.813365,12.000000,HIGH
+RL04,base LCR proxy,WITHIN_LIMIT,158.721676,100.000000,HIGH
+RL05,NSFR proxy,WITHIN_LIMIT,143.353978,100.000000,HIGH
+RL06,combined survival horizon,WITHIN_LIMIT,30.000000,30.000000,HIGH
+RL07,aggregate FX open position / equity,BREACH,33.333333,20.000000,CRITICAL

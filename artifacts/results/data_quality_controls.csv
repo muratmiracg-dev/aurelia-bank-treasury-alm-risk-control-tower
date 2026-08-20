@@ -1,0 +1,11 @@
+control_id,control,status,observed,threshold,severity
+DQ01,position identifiers are unique,PASS,0,0,HIGH
+DQ02,critical position fields are complete,PASS,0,0,HIGH
+DQ03,currencies are governed,PASS,none,none,HIGH
+DQ04,balances are positive,PASS,120.075349,>0,HIGH
+DQ05,rates are non-negative,PASS,0.0,>=0,HIGH
+DQ06,repricing does not exceed maturity,PASS,0.0,<=0,HIGH
+DQ07,accounting identity balances,PASS,-2.9103830456733704e-11,0,CRITICAL
+DQ08,principal cash flows reconcile,PASS,4.999999873689376e-06,<0.0001,CRITICAL
+DQ09,all currencies have 19 curve points,PASS,"{'EUR': 19, 'TRY': 19, 'USD': 19}",19,HIGH
+DQ10,curve rates are finite,PASS,0,0,HIGH
