@@ -11,7 +11,7 @@ from fastapi import Depends, FastAPI, Header, HTTPException
 
 app = FastAPI(
     title="Aurelia Bank Treasury & ALM API",
-    version="1.0.0",
+    version="1.1.0",
     description="Read-only access to synthetic ALM decision-support outputs.",
 )
 

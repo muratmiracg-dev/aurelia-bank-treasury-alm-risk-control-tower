@@ -33,6 +33,15 @@ def main() -> None:
     controls = pd.read_csv(root / "artifacts/results/data_quality_controls.csv")
     if set(controls["status"]) != {"PASS"}:
         raise SystemExit("Data-quality control file contains a failure")
+    liquidity = pd.read_csv(root / "artifacts/results/liquidity.csv").set_index("scenario")
+    if "rapid_digital_run" not in liquidity.index:
+        raise SystemExit("Rapid digital-run liquidity scenario is missing")
+    rapid = liquidity.loc["rapid_digital_run"]
+    combined = liquidity.loc["combined"]
+    if not rapid["lcr_proxy_pct"] < combined["lcr_proxy_pct"]:
+        raise SystemExit("Rapid digital-run stress is not more severe than combined stress")
+    if int(rapid["survival_horizon_days"]) != 7:
+        raise SystemExit("Rapid digital-run survival horizon drifted from the governed snapshot")
 
     for line in (root / "MANIFEST.sha256").read_text(encoding="utf-8").splitlines():
         expected, relative = line.split("  ", maxsplit=1)

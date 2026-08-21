@@ -66,6 +66,24 @@ def test_non_positive_shock_validation(config):
         validate_project_config(broken)
 
 
+def test_invalid_hqla_market_value_shock_validation(config):
+    broken = yaml.safe_load(yaml.safe_dump(config))
+    broken["assumptions"]["liquidity"]["scenarios"]["rapid_digital_run"]["hqla_market_value_shock"][
+        "LEVEL_1"
+    ] = 1.0
+    with pytest.raises(ConfigurationError):
+        validate_project_config(broken)
+
+
+def test_invalid_liquidity_outflow_timing_validation(config):
+    broken = yaml.safe_load(yaml.safe_dump(config))
+    timing = broken["assumptions"]["liquidity"]["scenarios"]["rapid_digital_run"]["outflow_timing"]
+    timing[7] = 0.40
+    timing[1] = 0.55
+    with pytest.raises(ConfigurationError):
+        validate_project_config(broken)
+
+
 def test_load_project_config_missing_root(tmp_path: Path):
     with pytest.raises(ConfigurationError):
         load_project_config(tmp_path)

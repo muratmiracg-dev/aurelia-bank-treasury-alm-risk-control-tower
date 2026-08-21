@@ -10,4 +10,4 @@
 | R6 | FX translation becomes stale | As-of date, source URL and optional live connector | Low |
 | R7 | Reproducibility drifts | Fixed seed, tests, CI and SHA-256 manifest | Low |
 | R8 | A limit breach is hidden by aggregation | Currency views and explicit breach table | Low |
-
+| R9 | Rapid digital-run severity is mistaken for an observed forecast | Exploratory label, visible YAML, dedicated scenario note and ALCO challenge requirement | Medium |

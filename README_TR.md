@@ -12,6 +12,8 @@ Model bir resmî risk iştahı ihlali ve bir yönetim erken uyarısı üretiyor:
 
 - Toplam mutlak döviz açık pozisyonu özkaynağın **%33,3'ü**; iç limit **%20,0**.
 - Birleşik stres altında LCR vekil oranı **%94,8'e** düşüyor ve hayatta kalma süresi **30 günlük** tabana ulaşıyor.
+- Ağır fakat keşif amaçlı hızlı dijital mevduat çıkışı senaryosunda LCR vekili **%78,1'e**,
+  hayatta kalma süresi **7 güne** düşüyor ve HQLA tamponu **1,46 milyar TL** ek değer kaybediyor.
 - En kötü EVE kaybı Tier 1 sermayenin **%13,7'si**; **%15,0** limitin içinde fakat tampon sınırlı.
 - Bir yıllık en yüksek mutlak NII duyarlılığı **%5,8**; **%12,0** limitin içinde.
 
@@ -28,7 +30,7 @@ ALCO aksiyonu nettir: önce FX riskini azalt, sonra likidite tamponunu koru, son
 | IRRBB EVE | Basel'in öngördüğü altı faiz şoku | Delta EVE ve Tier 1 etkisi |
 | IRRBB NII | 12 aylık paralel yukarı/aşağı şok | Gelir duyarlılığı |
 | DV01 | Para birimi ve banka toplamı | Risk yoğunluğu ve hedge girdisi |
-| Likidite | Baz, bankaya özgü, piyasa geneli ve birleşik stres | LCR vekili ve hayatta kalma süresi |
+| Likidite | Baz, bankaya özgü, piyasa geneli, birleşik ve hızlı dijital çıkış stresi | LCR vekili, HQLA aşınması ve hayatta kalma süresi |
 | Yapısal fonlama | ASF ve RSF faktörleri | NSFR vekili |
 | FX riski | Açık pozisyon ve dört kur şoku | Özkaynak kullanımı ve stres P&L |
 | Hedge | IRS ve FX swap/forward risk azaltma senaryoları | Önce/sonra karşılaştırması |
@@ -47,10 +49,13 @@ Tutarlar aksi belirtilmedikçe milyon TL'dir. Üretim tohumu `20260819`, veri ke
 | Baz LCR vekili | %158,7 | %100,0 | Limit içinde |
 | Birleşik LCR vekili | %94,8 | %100,0 yönetim tabanı | Erken uyarı |
 | Birleşik hayatta kalma süresi | 30 gün | 30 gün | Tabanda |
+| Hızlı dijital çıkış LCR vekili | %78,1 | Keşif senaryosu | Ağır yönetim stresi |
+| Hızlı dijital çıkış hayatta kalma süresi | 7 gün | Keşif senaryosu | Acil fonlama tetikleyicisi |
+| Hızlı dijital çıkış HQLA kaybı | 1.460,0 | Keşif senaryosu | Piyasa likiditesi katmanı |
 | NSFR vekili | %143,4 | %100,0 | Limit içinde |
 | FX açık pozisyon / özkaynak | %33,3 | %20,0 | **İhlal** |
 | Veri kalitesi kontrolleri | 10 / 10 | Tamamı geçmeli | Başarılı |
-| Otomatik testler | 43 | %90 kapsam eşiği | %94,88 kapsam |
+| Otomatik testler | 46 | %90 kapsam eşiği | %93,88 satır kapsamı |
 
 ## Veri yaklaşımı
 
@@ -98,7 +103,7 @@ Salt okunur API'yi başlatmak için:
 make api
 ```
 
-`make verify`; Ruff kalite kontrolünü, 43 Pytest testini, %90 kapsam eşiğini, deterministik veri üretimini ve SHA-256 dosya doğrulamasını birlikte çalıştırır.
+`make verify`; Ruff kalite kontrolünü, 46 Pytest testini, %90 kapsam eşiğini, deterministik veri üretimini ve SHA-256 dosya doğrulamasını birlikte çalıştırır.
 
 ## Yöntem ve yönetişim dokümanları
 
@@ -108,6 +113,7 @@ make api
 - [Risk kaydı](docs/risk_register.md)
 - [ALCO karar playbook'u](docs/alco_playbook.md)
 - [Veri sözlüğü](docs/data_dictionary.md)
+- [Hızlı dijital mevduat çıkışı senaryosu](docs/rapid_digital_run_scenario.md)
 
 ## Temel resmî kaynaklar
 
@@ -125,4 +131,3 @@ make api
 ---
 
 **Murat Miraç Gedik** tarafından Bankacılık, Hazine, ALM ve Risk Analitiği portföy projesi olarak geliştirilmiştir.
-

@@ -23,8 +23,8 @@ committed CSV extracts from `data/demo/` and `artifacts/results/`, apply
    DV01 and risk-appetite comparison.
 4. **NII Sensitivity** - parallel up/down earnings impact, product contribution and
    deposit-beta sensitivity.
-5. **Liquidity & Funding** - base/idiosyncratic/market/combined LCR proxy, survival
-   ladder, HQLA, net outflows and NSFR proxy.
+5. **Liquidity & Funding** - base/idiosyncratic/market/combined/rapid-digital-run LCR
+   proxy, survival ladder, base-to-stressed HQLA bridge, net outflows and NSFR proxy.
 6. **FX & Hedge Simulation** - open positions, FX stress P&L, proposed hedge notionals
    and pre/post exposure.
 7. **Controls & Governance** - data-quality evidence, limit status, methodology links,
@@ -36,6 +36,7 @@ committed CSV extracts from `data/demo/` and `artifacts/results/`, apply
 - Every scenario visual must show units and the as-of date.
 - Proxies must retain the word `proxy`; they are not regulatory returns.
 - A hedge recommendation must always show `ALCO_REVIEW_REQUIRED`.
+- The rapid-digital-run scenario must be labelled `exploratory management stress`, not a
+  regulatory calibration or point forecast.
 
 Power BI Project documentation: https://learn.microsoft.com/en-us/power-bi/developer/projects/projects-overview
-

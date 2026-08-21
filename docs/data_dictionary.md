@@ -28,8 +28,11 @@
 | Delta EVE | Shocked EVE less baseline EVE |
 | NII | One-year interest income less interest expense |
 | LCR proxy | Eligible HQLA divided by 30-day stressed net outflows |
+| Base HQLA | Eligible liquidity buffer after the configured regulatory-style haircut only |
+| Stressed HQLA | Base HQLA after the scenario-specific market-value shock |
+| HQLA market-value loss | Base HQLA less stressed HQLA |
 | NSFR proxy | Available stable funding divided by required stable funding |
 | Survival horizon | First cumulative stress point where liquidity turns negative |
+| Outflow timing | Share of the 30-day stress outflow recognised at each governed ladder day |
 | FX open position | Foreign-currency assets less liabilities plus hedge overlay |
 | DV01 | EVE change from a one-basis-point parallel rate increase |
-

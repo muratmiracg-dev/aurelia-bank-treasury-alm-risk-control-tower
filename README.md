@@ -2,8 +2,8 @@
 
 [![CI](https://github.com/muratmiracg-dev/aurelia-bank-treasury-alm-risk-control-tower/actions/workflows/ci.yml/badge.svg)](https://github.com/muratmiracg-dev/aurelia-bank-treasury-alm-risk-control-tower/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/muratmiracg-dev/aurelia-bank-treasury-alm-risk-control-tower/actions/workflows/codeql.yml/badge.svg)](https://github.com/muratmiracg-dev/aurelia-bank-treasury-alm-risk-control-tower/actions/workflows/codeql.yml)
-[![Tests](https://img.shields.io/badge/tests-43%20passed-15803D)](tests)
-[![Coverage](https://img.shields.io/badge/coverage-94.88%25-15803D)](docs/validation_report.md)
+[![Tests](https://img.shields.io/badge/tests-46%20passed-15803D)](tests)
+[![Coverage](https://img.shields.io/badge/coverage-93.88%25-15803D)](docs/validation_report.md)
 [![Python](https://img.shields.io/badge/python-3.11%2B-3776AB)](pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0E7490)](LICENSE)
 
@@ -19,6 +19,8 @@ The model identifies one formal risk-appetite breach and one management early wa
 
 - Aggregate absolute FX open position is **33.3% of equity**, above the **20.0%** internal limit.
 - Combined-stress LCR proxy falls to **94.8%** and the survival horizon reaches the **30-day** floor.
+- The severe exploratory rapid-digital-run scenario reduces the LCR proxy to **78.1%**,
+  shortens survival to **7 days** and applies a **TRY 1.46bn** HQLA market-value loss.
 - Worst EVE loss is **13.7% of Tier 1**, inside the **15.0%** limit but with limited headroom.
 - Maximum absolute 12-month NII sensitivity is **5.8%**, inside the **12.0%** limit.
 
@@ -46,7 +48,7 @@ Credit-risk projects show how a bank evaluates customers. This project shows how
 | IRRBB EVE | Six prescribed Basel scenarios | Delta EVE, Tier 1 impact and binding shock |
 | IRRBB NII | 12-month parallel-up/down sensitivity | Delta NII and earnings-at-risk signal |
 | DV01 | Currency and bank-level present-value sensitivity | Risk concentration and hedge sizing input |
-| Liquidity | Base, idiosyncratic, market-wide and combined stress | LCR proxy and survival horizon |
+| Liquidity | Base, idiosyncratic, market-wide, combined and rapid-digital-run stress | LCR proxy, HQLA erosion and survival horizon |
 | Structural funding | ASF and RSF factor model | NSFR proxy |
 | FX risk | TRY-equivalent open positions and four FX shocks | Equity usage and stress P&L |
 | Hedging | IRS and FX swap/forward reduction heuristics | Before/after exposure and ALCO review status |
@@ -65,10 +67,13 @@ All amounts are TRY million unless stated otherwise. The snapshot is reproducibl
 | Base LCR proxy | 158.7% | 100.0% | Within formal control |
 | Combined LCR proxy | 94.8% | 100.0% management floor | Early warning |
 | Combined survival horizon | 30 days | 30 days | At floor |
+| Rapid digital-run LCR proxy | 78.1% | Exploratory scenario | Severe management stress |
+| Rapid digital-run survival | 7 days | Exploratory scenario | Contingency funding trigger |
+| Rapid digital-run HQLA loss | 1,460.0 | Exploratory scenario | Market-liquidity overlay |
 | NSFR proxy | 143.4% | 100.0% | Within limit |
 | Aggregate FX open / equity | 33.3% | 20.0% | **Breach** |
 | Data-quality controls | 10 / 10 | All pass | Pass |
-| Automated tests | 43 | 90% coverage gate | 94.88% coverage |
+| Automated tests | 46 | 90% coverage gate | 93.88% line coverage |
 
 ## Data architecture
 
@@ -120,7 +125,7 @@ make verify
 `make verify` performs the full quality gate:
 
 1. checks formatting and lint rules with Ruff;
-2. runs the 43-test Pytest suite with a 90% coverage threshold;
+2. runs the 46-test Pytest suite with a 90% coverage threshold;
 3. regenerates deterministic demo data and analytical outputs;
 4. validates required files, control results and SHA-256 checksums.
 
@@ -176,6 +181,8 @@ Set `AURELIA_API_KEY` to require the `X-API-Key` header. See [`.env.example`](.e
 - [Risk register](docs/risk_register.md) separates model, data, market and execution risks.
 - [ALCO playbook](docs/alco_playbook.md) turns metrics into governed decisions.
 - [Data dictionary](docs/data_dictionary.md) defines the position and output fields.
+- [Rapid digital-run scenario note](docs/rapid_digital_run_scenario.md) records the severe
+  exploratory assumptions, calculation path, limitations and ALCO triggers.
 
 ### Primary references
 
@@ -192,7 +199,7 @@ Set `AURELIA_API_KEY` to require the `X-API-Key` header. See [`.env.example`](.e
 - configuration-driven assumptions and limits;
 - typed package, CLI and read-only FastAPI service;
 - SQLite and SQL analytical layers;
-- 43 automated tests and 94.88% line coverage;
+- 46 automated tests and a 90% line-coverage gate;
 - Ruff formatting and linting;
 - GitHub Actions CI and CodeQL security analysis;
 - Dockerfile and Compose configuration;
@@ -205,4 +212,3 @@ Released under the [MIT License](LICENSE).
 ---
 
 Built by **Murat Miraç Gedik** as a Banking, Treasury, ALM and Risk Analytics portfolio project.
-

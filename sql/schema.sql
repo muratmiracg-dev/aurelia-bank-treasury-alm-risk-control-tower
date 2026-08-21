@@ -52,7 +52,9 @@ CREATE TABLE IF NOT EXISTS aurelia_alm.nii_result (
 
 CREATE TABLE IF NOT EXISTS aurelia_alm.liquidity_result (
     scenario text PRIMARY KEY,
+    base_hqla_try_mn numeric(20, 6) NOT NULL,
     hqla_try_mn numeric(20, 6) NOT NULL,
+    hqla_market_value_loss_try_mn numeric(20, 6) NOT NULL,
     gross_outflows_30d_try_mn numeric(20, 6) NOT NULL,
     eligible_inflows_30d_try_mn numeric(20, 6) NOT NULL,
     net_outflows_30d_try_mn numeric(20, 6) NOT NULL,
@@ -76,4 +78,3 @@ CREATE INDEX IF NOT EXISTS ix_position_currency_product
     ON aurelia_alm.position (currency, product);
 CREATE INDEX IF NOT EXISTS ix_cashflow_position_time
     ON aurelia_alm.cashflow (position_id, time_years);
-

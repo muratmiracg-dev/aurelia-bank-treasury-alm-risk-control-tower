@@ -20,6 +20,9 @@ SELECT
     lcr_proxy_pct,
     nsfr_proxy_pct,
     survival_horizon_days,
+    base_hqla_try_mn,
+    hqla_try_mn,
+    hqla_market_value_loss_try_mn,
     CASE
         WHEN lcr_proxy_pct >= 120 THEN 'GREEN'
         WHEN lcr_proxy_pct >= 100 THEN 'AMBER'
@@ -31,4 +34,3 @@ CREATE OR REPLACE VIEW aurelia_alm.v_limit_breaches AS
 SELECT control_id, control, observed, limit_value, severity
 FROM aurelia_alm.risk_control
 WHERE status = 'BREACH';
-

@@ -20,3 +20,12 @@ ORDER BY lcr_proxy_pct;
 -- ALCO query 5: open limit breaches
 SELECT * FROM aurelia_alm.v_limit_breaches;
 
+-- ALCO query 6: rapid digital-run escalation metrics
+SELECT
+    scenario,
+    stressed_hqla_try_mn,
+    hqla_market_value_loss_try_mn,
+    lcr_proxy_pct,
+    survival_horizon_days
+FROM aurelia_alm.liquidity_result
+WHERE scenario = 'rapid_digital_run';
