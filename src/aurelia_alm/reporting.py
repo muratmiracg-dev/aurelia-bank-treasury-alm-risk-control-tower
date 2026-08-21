@@ -16,7 +16,15 @@ BLUE = "#1F5A94"
 TEAL = "#00A6A6"
 AMBER = "#F4A261"
 RED = "#D1495B"
+BURGUNDY = "#8C1C3A"
 LIGHT = "#E8EEF4"
+LIQUIDITY_COLORS = {
+    "base": TEAL,
+    "market_wide": BLUE,
+    "idiosyncratic": AMBER,
+    "combined": RED,
+    "rapid_digital_run": BURGUNDY,
+}
 
 
 def _style() -> None:
@@ -100,9 +108,9 @@ def _plot_gap(frame: pd.DataFrame, path: Path) -> Path:
 
 
 def _plot_liquidity(frame: pd.DataFrame, path: Path) -> Path:
-    order = ["base", "market_wide", "idiosyncratic", "combined"]
+    order = ["base", "market_wide", "idiosyncratic", "combined", "rapid_digital_run"]
     plotted = frame.set_index("scenario").reindex(order).reset_index()
-    colors = [TEAL, BLUE, AMBER, RED]
+    colors = [LIQUIDITY_COLORS[scenario] for scenario in plotted["scenario"]]
     fig, ax = plt.subplots(figsize=(9.5, 5.5))
     bars = ax.bar(
         plotted["scenario"].str.replace("_", " ").str.title(),
@@ -164,7 +172,7 @@ def _plot_executive(results: dict[str, pd.DataFrame], path: Path) -> Path:
     axes[1, 0].bar(
         liquidity["scenario"].str.replace("_", " "),
         liquidity["lcr_proxy_pct"],
-        color=[TEAL, BLUE, AMBER, RED],
+        color=[LIQUIDITY_COLORS.get(scenario, BLUE) for scenario in liquidity["scenario"]],
     )
     axes[1, 0].axhline(100, color=NAVY, linestyle="--")
     axes[1, 0].set_title("LCR proxy")

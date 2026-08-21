@@ -54,6 +54,24 @@ CALCULATE(
     liquidity[scenario] = "combined"
 ) / 100
 
+Rapid Digital Run LCR Proxy % =
+CALCULATE(
+    MAX(liquidity[lcr_proxy_pct]),
+    liquidity[scenario] = "rapid_digital_run"
+) / 100
+
+Rapid Digital Run Survival Days =
+CALCULATE(
+    MIN(liquidity[survival_horizon_days]),
+    liquidity[scenario] = "rapid_digital_run"
+)
+
+Rapid Digital Run HQLA Loss TRY mn =
+CALCULATE(
+    MAX(liquidity[hqla_market_value_loss_try_mn]),
+    liquidity[scenario] = "rapid_digital_run"
+)
+
 NSFR Proxy % =
 MAX(liquidity[nsfr_proxy_pct]) / 100
 
@@ -76,4 +94,3 @@ SWITCH(
     [Combined LCR Proxy %] < 1.00, "AMBER",
     "GREEN"
 )
-

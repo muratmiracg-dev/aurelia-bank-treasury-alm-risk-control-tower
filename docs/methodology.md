@@ -61,6 +61,17 @@ The liquidity module calculates:
 - cumulative survival horizon; and
 - an NSFR decision proxy from visible ASF/RSF factors.
 
+The fifth scenario, `rapid_digital_run`, is a severe exploratory management stress. It
+combines elevated retail and term-deposit runoff, full wholesale runoff, higher committed
+facility utilisation, weaker inflow realisation, front-loaded day-1/day-7 withdrawals and
+an additional market-value shock to already eligible HQLA. Scenario-adjusted HQLA is:
+
+`stressed HQLA = balance × (1 - regulatory haircut) × (1 - market-value shock)`
+
+The digital-run timing profile recognises 55% of 30-day outflows on day 1 and 85% by day 7.
+These internally governed assumptions are deliberately visible in YAML and are not presented
+as historical estimates, legal thresholds or regulatory calibrations.
+
 The ratios deliberately retain the label `proxy`. A regulatory calculation requires more
 granular counterparty, operational-deposit, encumbrance, cap, currency and jurisdictional
 rules than the public demonstration contains.
@@ -77,5 +88,5 @@ and FX-swap/forward notionals target only a portion of exposure and are always l
 The seed is `20260819`. Every generated input, output, chart and SQLite table can be
 regenerated with `make demo`. `MANIFEST.sha256` records output hashes. Tests cover data
 contracts, Basel shock mechanics, accounting reconciliation, limits, API behaviour and the
-end-to-end pipeline.
-
+end-to-end pipeline, including ordering, HQLA attribution and runoff-timing invariants for
+the rapid-digital-run scenario.

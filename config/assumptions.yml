@@ -56,3 +56,22 @@ liquidity:
       wholesale_runoff: 1.00
       committed_facility_draw: 0.40
       inflow_realisation: 0.55
+    rapid_digital_run:
+      description: "Severe exploratory run with accelerated digital withdrawals and stressed HQLA monetisation; not a regulatory calibration."
+      demand_deposit_runoff: 0.45
+      term_deposit_runoff: 0.30
+      wholesale_runoff: 1.00
+      committed_facility_draw: 0.50
+      inflow_realisation: 0.40
+      hqla_market_value_shock:
+        LEVEL_1: 0.02
+        LEVEL_2A: 0.10
+        LEVEL_2B: 0.25
+        NONE: 0.00
+      outflow_timing:
+        1: 0.55
+        7: 0.85
+        30: 1.00
+        90: 1.15
+        180: 1.25
+        365: 1.40

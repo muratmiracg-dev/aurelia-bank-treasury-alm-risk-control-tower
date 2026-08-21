@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aurelia-alm"
-version = "1.0.0"
+version = "1.1.0"
 description = "Auditable Treasury and ALM decision-support platform for IRRBB, liquidity, FX and hedge analytics."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -60,4 +60,3 @@ select = ["E", "F", "I", "UP", "B", "SIM", "C4"]
 
 [tool.ruff.format]
 quote-style = "double"
-

@@ -20,9 +20,35 @@ def test_liquidity_stress_order(config, demo):
     )
     base = summary.set_index("scenario").loc["base", "lcr_proxy_pct"]
     combined = summary.set_index("scenario").loc["combined", "lcr_proxy_pct"]
-    assert base > combined
-    assert len(ladder) == 24
-    assert set(summary["scenario"]) == {"base", "idiosyncratic", "market_wide", "combined"}
+    rapid = summary.set_index("scenario").loc["rapid_digital_run"]
+    assert base > combined > rapid["lcr_proxy_pct"]
+    assert rapid["survival_horizon_days"] == 7
+    assert rapid["hqla_market_value_loss_try_mn"] > 0
+    assert len(ladder) == 30
+    assert set(summary["scenario"]) == {
+        "base",
+        "idiosyncratic",
+        "market_wide",
+        "combined",
+        "rapid_digital_run",
+    }
+
+
+def test_rapid_digital_run_front_loads_outflows(config, demo):
+    _, ladder = liquidity_stress(
+        demo["positions"], demo["cashflows"], config["assumptions"]["liquidity"]
+    )
+    indexed = ladder.set_index(["scenario", "day"])
+    rapid_share = (
+        indexed.loc[("rapid_digital_run", 7), "cumulative_outflows_try_mn"]
+        / indexed.loc[("rapid_digital_run", 30), "cumulative_outflows_try_mn"]
+    )
+    combined_share = (
+        indexed.loc[("combined", 7), "cumulative_outflows_try_mn"]
+        / indexed.loc[("combined", 30), "cumulative_outflows_try_mn"]
+    )
+    assert rapid_share == pytest.approx(0.85)
+    assert combined_share == pytest.approx(0.55)
 
 
 def test_fx_positions_and_ratio(demo):

@@ -68,7 +68,10 @@ def test_api_read_only_outputs(project_root: Path, monkeypatch):
     assert summary.json()["project"].startswith("Aurelia Bank")
     assert len(client.get("/api/v1/irrbb/eve").json()) == 24
     assert len(client.get("/api/v1/irrbb/nii").json()) == 2
-    assert len(client.get("/api/v1/liquidity").json()) == 4
+    liquidity = client.get("/api/v1/liquidity").json()
+    assert len(liquidity) == 5
+    rapid = next(row for row in liquidity if row["scenario"] == "rapid_digital_run")
+    assert rapid["survival_horizon_days"] == 7
     assert len(client.get("/api/v1/hedges").json()) == 5
 
 

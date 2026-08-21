@@ -98,6 +98,9 @@ def _executive_summary(
     combined_liquidity = (
         results["liquidity"].loc[results["liquidity"]["scenario"] == "combined"].iloc[0]
     )
+    rapid_digital_run = (
+        results["liquidity"].loc[results["liquidity"]["scenario"] == "rapid_digital_run"].iloc[0]
+    )
     fx_ratio = aggregate_fx_limit_ratio(results["fx"], equity)
     return {
         "project": "Aurelia Bank Treasury, ALM & Risk Control Tower",
@@ -128,8 +131,15 @@ def _executive_summary(
         "liquidity": {
             "base_lcr_proxy_pct": round(float(base_liquidity["lcr_proxy_pct"]), 3),
             "combined_lcr_proxy_pct": round(float(combined_liquidity["lcr_proxy_pct"]), 3),
+            "rapid_digital_run_lcr_proxy_pct": round(float(rapid_digital_run["lcr_proxy_pct"]), 3),
             "nsfr_proxy_pct": round(float(combined_liquidity["nsfr_proxy_pct"]), 3),
             "combined_survival_horizon_days": int(combined_liquidity["survival_horizon_days"]),
+            "rapid_digital_run_survival_horizon_days": int(
+                rapid_digital_run["survival_horizon_days"]
+            ),
+            "rapid_digital_run_hqla_market_value_loss_try_mn": round(
+                float(rapid_digital_run["hqla_market_value_loss_try_mn"]), 3
+            ),
         },
         "fx": {"aggregate_open_position_equity_pct": round(fx_ratio, 3)},
         "controls": {

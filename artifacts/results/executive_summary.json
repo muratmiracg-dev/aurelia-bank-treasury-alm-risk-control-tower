@@ -27,8 +27,11 @@
   "liquidity": {
     "base_lcr_proxy_pct": 158.722,
     "combined_lcr_proxy_pct": 94.834,
+    "rapid_digital_run_lcr_proxy_pct": 78.092,
     "nsfr_proxy_pct": 143.354,
-    "combined_survival_horizon_days": 30
+    "combined_survival_horizon_days": 30,
+    "rapid_digital_run_survival_horizon_days": 7,
+    "rapid_digital_run_hqla_market_value_loss_try_mn": 1460.0
   },
   "fx": {
     "aggregate_open_position_equity_pct": 33.333
