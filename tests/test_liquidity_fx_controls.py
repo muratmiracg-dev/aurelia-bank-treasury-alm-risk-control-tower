@@ -59,6 +59,21 @@ def test_fx_positions_and_ratio(demo):
     assert ratio == pytest.approx(33.3333333333)
 
 
+@pytest.mark.parametrize("equity_try_mn", [0.0, -1.0, float("nan"), float("inf")])
+def test_aggregate_fx_ratio_rejects_invalid_equity(equity_try_mn):
+    positions = pd.DataFrame({"net_open_position_try_mn": [100.0]})
+
+    with pytest.raises(ValueError, match="equity_try_mn must be a finite positive value"):
+        aggregate_fx_limit_ratio(positions, equity_try_mn)
+
+
+def test_fx_open_position_rejects_non_positive_equity(demo):
+    portfolio = demo["positions"].copy()
+    portfolio.loc[portfolio["side"] == "equity", "balance_try_mn"] = 0.0
+
+    with pytest.raises(ValueError, match="equity_try_mn must be a finite positive value"):
+        fx_open_position(portfolio)
+
 def test_fx_overlay_reduces_exposure(demo):
     hedged = fx_open_position(demo["positions"], {"USD": 4_800, "EUR": 1_200})
     assert hedged["net_open_position_try_mn"].abs().sum() == pytest.approx(1_500)
