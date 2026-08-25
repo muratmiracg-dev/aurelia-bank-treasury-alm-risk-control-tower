@@ -2,7 +2,17 @@
 
 from __future__ import annotations
 
+import math
+
 import pandas as pd
+
+
+def _require_positive_equity(equity_try_mn: float) -> float:
+    """Return validated equity used as the denominator for FX risk ratios."""
+    equity = float(equity_try_mn)
+    if not math.isfinite(equity) or equity <= 0:
+        raise ValueError("equity_try_mn must be a finite positive value")
+    return equity
 
 
 def fx_open_position(
@@ -22,7 +32,9 @@ def fx_open_position(
     net["net_open_position_try_mn"] = (
         net["gross_open_position_try_mn"] + net["hedge_overlay_try_mn"]
     )
-    equity = float(portfolio.loc[portfolio["side"] == "equity", "balance_try_mn"].sum())
+    equity = _require_positive_equity(
+        portfolio.loc[portfolio["side"] == "equity", "balance_try_mn"].sum()
+    )
     net["open_position_equity_pct"] = 100.0 * net["net_open_position_try_mn"].abs() / equity
     for shock_pct in (-20.0, -10.0, 10.0, 20.0):
         label = f"fx_{shock_pct:+.0f}pct_pnl_try_mn".replace("+", "up_").replace("-", "down_")
@@ -31,4 +43,5 @@ def fx_open_position(
 
 
 def aggregate_fx_limit_ratio(fx_positions: pd.DataFrame, equity_try_mn: float) -> float:
-    return 100.0 * float(fx_positions["net_open_position_try_mn"].abs().sum()) / equity_try_mn
+    equity = _require_positive_equity(equity_try_mn)
+    return 100.0 * float(fx_positions["net_open_position_try_mn"].abs().sum()) / equity
