@@ -74,6 +74,7 @@ def test_fx_open_position_rejects_non_positive_equity(demo):
     with pytest.raises(ValueError, match="equity_try_mn must be a finite positive value"):
         fx_open_position(portfolio)
 
+
 def test_fx_overlay_reduces_exposure(demo):
     hedged = fx_open_position(demo["positions"], {"USD": 4_800, "EUR": 1_200})
     assert hedged["net_open_position_try_mn"].abs().sum() == pytest.approx(1_500)
