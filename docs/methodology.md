@@ -81,7 +81,10 @@ rules than the public demonstration contains.
 Net open position equals foreign-currency assets less liabilities plus any explicit hedge
 overlay. Stress P&L applies symmetric TRY appreciation/depreciation shocks. Proposed IRS
 and FX-swap/forward notionals target only a portion of exposure and are always labelled
-`ALCO_REVIEW_REQUIRED`.
+`ALCO_REVIEW_REQUIRED`. Target reductions must be finite fractions from zero to one, and
+the reference swap duration must be finite and positive. Invalid assumptions fail before
+any hedge proposal is produced, preventing accidental exposure amplification or undefined
+notionals.
 
 ## 8. Reproducibility
 
