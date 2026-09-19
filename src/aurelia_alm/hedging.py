@@ -2,7 +2,24 @@
 
 from __future__ import annotations
 
+import math
+
 import pandas as pd
+
+
+def _validate_hedge_parameters(
+    interest_rate_target_reduction: float,
+    fx_target_reduction: float,
+    reference_swap_duration_years: float,
+) -> None:
+    for name, value in (
+        ("interest_rate_target_reduction", interest_rate_target_reduction),
+        ("fx_target_reduction", fx_target_reduction),
+    ):
+        if not math.isfinite(value) or not 0.0 <= value <= 1.0:
+            raise ValueError(f"{name} must be a finite value between 0 and 1")
+    if not math.isfinite(reference_swap_duration_years) or reference_swap_duration_years <= 0:
+        raise ValueError("reference_swap_duration_years must be a finite positive value")
 
 
 def propose_hedges(
@@ -12,6 +29,11 @@ def propose_hedges(
     fx_target_reduction: float = 0.80,
     reference_swap_duration_years: float = 4.0,
 ) -> pd.DataFrame:
+    _validate_hedge_parameters(
+        interest_rate_target_reduction,
+        fx_target_reduction,
+        reference_swap_duration_years,
+    )
     rows: list[dict[str, float | str]] = []
     for row in dv01.loc[dv01["currency"] != "TOTAL"].itertuples(index=False):
         target_offset = -float(row.dv01_try_mn) * interest_rate_target_reduction
