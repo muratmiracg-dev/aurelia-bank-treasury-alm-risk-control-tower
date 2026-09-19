@@ -89,6 +89,25 @@ def test_hedge_proposals(config, demo):
     assert (hedges["recommended_notional_try_mn"] > 0).all()
 
 
+@pytest.mark.parametrize(
+    ("parameter", "value", "message"),
+    [
+        ("interest_rate_target_reduction", -0.01, "interest_rate_target_reduction"),
+        ("interest_rate_target_reduction", 1.01, "interest_rate_target_reduction"),
+        ("fx_target_reduction", float("nan"), "fx_target_reduction"),
+        ("fx_target_reduction", float("inf"), "fx_target_reduction"),
+        ("reference_swap_duration_years", 0.0, "reference_swap_duration_years"),
+        ("reference_swap_duration_years", -1.0, "reference_swap_duration_years"),
+    ],
+)
+def test_hedge_proposals_reject_unsafe_parameters(config, demo, parameter, value, message):
+    dv01 = dv01_by_currency(demo["cashflows"], demo["market_curves"])
+    fx = fx_open_position(demo["positions"])
+
+    with pytest.raises(ValueError, match=message):
+        propose_hedges(dv01, fx, **{parameter: value})
+
+
 def test_data_quality_controls_pass(demo):
     controls = data_quality_controls(demo["positions"], demo["cashflows"], demo["market_curves"])
     assert len(controls) == 10
