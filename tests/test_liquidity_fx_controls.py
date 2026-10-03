@@ -134,3 +134,22 @@ def test_risk_limits_show_fx_breach(config, demo):
     controls = risk_limit_controls(eve, nii, liquidity, ratio, config["limits"])
     breaches = controls.loc[controls["status"] == "BREACH", "control_id"].tolist()
     assert breaches == ["RL07"]
+
+
+@pytest.mark.parametrize("amount", [float("nan"), float("inf"), -float("inf"), True])
+def test_fx_overlay_rejects_invalid_amounts(demo, amount):
+    with pytest.raises(ValueError, match="finite signed numbers"):
+        fx_open_position(demo["positions"], {"USD": amount})
+
+
+def test_fx_overlay_rejects_unknown_currency(demo):
+    with pytest.raises(ValueError, match="unknown FX currency: USDD"):
+        fx_open_position(demo["positions"], {"USDD": 100})
+
+
+def test_fx_overlay_preserves_signed_hedges(demo):
+    base = fx_open_position(demo["positions"]).set_index("currency")
+    hedged = fx_open_position(demo["positions"], {"USD": -100}).set_index("currency")
+    assert hedged.loc["USD", "net_open_position_try_mn"] == pytest.approx(
+        base.loc["USD", "net_open_position_try_mn"] - 100
+    )

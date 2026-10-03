@@ -28,6 +28,11 @@ def fx_open_position(
     net = frame.groupby("currency", as_index=False)["signed_try_mn"].sum()
     net = net.rename(columns={"signed_try_mn": "gross_open_position_try_mn"})
     overlay = hedge_overlay or {}
+    for currency, amount in overlay.items():
+        if currency not in set(net["currency"]):
+            raise ValueError(f"hedge_overlay contains unknown FX currency: {currency}")
+        if isinstance(amount, bool) or not math.isfinite(float(amount)):
+            raise ValueError("hedge_overlay amounts must be finite signed numbers")
     net["hedge_overlay_try_mn"] = net["currency"].map(overlay).fillna(0.0)
     net["net_open_position_try_mn"] = (
         net["gross_open_position_try_mn"] + net["hedge_overlay_try_mn"]

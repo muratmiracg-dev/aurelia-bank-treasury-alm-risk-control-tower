@@ -212,3 +212,7 @@ Released under the [MIT License](LICENSE).
 ---
 
 Built by **Murat Miraç Gedik** as a Banking, Treasury, ALM and Risk Analytics portfolio project.
+
+### Input validation contract
+
+FX hedge overlays must reference a non-TRY currency present in the portfolio and contain finite signed amounts. Unknown currencies, booleans, NaN, and infinities are rejected before stress calculations; negative hedges remain valid.
