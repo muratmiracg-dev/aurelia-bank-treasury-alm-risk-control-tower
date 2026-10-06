@@ -57,6 +57,8 @@ The liquidity module calculates:
 - eligible HQLA after configured haircuts;
 - 30-day stressed outflows by funding type;
 - conservative recognised inflows;
+- fail-closed validation of runoff, drawdown, inflow-realisation, HQLA-shock, and cumulative
+  outflow-timing assumptions before stress results are produced;
 - an LCR decision proxy;
 - cumulative survival horizon; and
 - an NSFR decision proxy from visible ASF/RSF factors.
