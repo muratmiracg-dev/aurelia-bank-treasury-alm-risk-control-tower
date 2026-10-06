@@ -11,6 +11,36 @@ DAY_GRID = (1, 7, 30, 90, 180, 365)
 DEFAULT_OUTFLOW_TIMING = {1: 0.25, 7: 0.55, 30: 1.00, 90: 1.15, 180: 1.25, 365: 1.40}
 
 
+def _validate_scenario_parameters(scenario: str, params: dict[str, Any]) -> None:
+    probability_fields = (
+        "demand_deposit_runoff",
+        "term_deposit_runoff",
+        "wholesale_runoff",
+        "committed_facility_draw",
+        "inflow_realisation",
+    )
+    for field in probability_fields:
+        value = params.get(field)
+        if (
+            isinstance(value, bool)
+            or not isinstance(value, int | float)
+            or not np.isfinite(value)
+            or not 0 <= value <= 1
+        ):
+            raise ValueError(f"Scenario {scenario} {field} must be a finite value between 0 and 1")
+    shocks = params.get("hqla_market_value_shock", {})
+    if any(
+        isinstance(value, bool)
+        or not isinstance(value, int | float)
+        or not np.isfinite(value)
+        or not 0 <= value <= 1
+        for value in shocks.values()
+    ):
+        raise ValueError(
+            f"Scenario {scenario} HQLA market-value shocks must be finite values between 0 and 1"
+        )
+
+
 def _hqla(
     portfolio: pd.DataFrame,
     regulatory_haircuts: dict[str, float],
@@ -68,6 +98,7 @@ def liquidity_stress(
     ladder_rows: list[dict[str, float | str | int]] = []
 
     for scenario, params in liquidity_config["scenarios"].items():
+        _validate_scenario_parameters(scenario, params)
         base_hqla, hqla = _hqla(
             portfolio,
             haircuts,
@@ -79,6 +110,15 @@ def liquidity_stress(
         }
         if set(outflow_timing) != set(DAY_GRID):
             raise ValueError(f"Scenario {scenario} must define the governed liquidity day grid")
+        timing_values = [outflow_timing[day] for day in DAY_GRID]
+        if (
+            not np.isfinite(timing_values).all()
+            or any(value < 0 for value in timing_values)
+            or timing_values != sorted(timing_values)
+        ):
+            raise ValueError(
+                f"Scenario {scenario} outflow timing must be finite, non-negative, and cumulative"
+            )
         demand = float(
             liabilities.loc[liabilities["product"] == "demand_deposits", "balance_try_mn"].sum()
         )

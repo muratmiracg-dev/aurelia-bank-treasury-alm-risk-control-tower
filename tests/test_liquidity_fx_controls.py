@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 import pandas as pd
 import pytest
 
@@ -49,6 +51,36 @@ def test_rapid_digital_run_front_loads_outflows(config, demo):
     )
     assert rapid_share == pytest.approx(0.85)
     assert combined_share == pytest.approx(0.55)
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("demand_deposit_runoff", -0.01),
+        ("term_deposit_runoff", 1.01),
+        ("inflow_realisation", float("nan")),
+        ("committed_facility_draw", True),
+    ],
+)
+def test_liquidity_stress_rejects_invalid_scenario_rates(config, demo, field, value):
+    liquidity_config = deepcopy(config["assumptions"]["liquidity"])
+    liquidity_config["scenarios"]["base"][field] = value
+    with pytest.raises(ValueError, match=field):
+        liquidity_stress(demo["positions"], demo["cashflows"], liquidity_config)
+
+
+def test_liquidity_stress_rejects_non_cumulative_outflow_timing(config, demo):
+    liquidity_config = deepcopy(config["assumptions"]["liquidity"])
+    liquidity_config["scenarios"]["base"]["outflow_timing"] = {
+        1: 0.25,
+        7: 0.1,
+        30: 1.0,
+        90: 1.15,
+        180: 1.25,
+        365: 1.4,
+    }
+    with pytest.raises(ValueError, match="outflow timing"):
+        liquidity_stress(demo["positions"], demo["cashflows"], liquidity_config)
 
 
 def test_fx_positions_and_ratio(demo):
