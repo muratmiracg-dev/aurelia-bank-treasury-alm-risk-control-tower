@@ -20,6 +20,16 @@ def shock_bps(
     if scenario not in EVE_SCENARIOS:
         raise ValueError(f"Unknown IRRBB scenario: {scenario}")
     tenor = np.asarray(tenor_years, dtype=float)
+    if not np.isfinite(tenor).all() or (tenor < 0).any():
+        raise ValueError("tenor_years must contain finite non-negative values")
+    if not np.isfinite(decay_years) or decay_years <= 0:
+        raise ValueError("decay_years must be finite and positive")
+    required = {"parallel", "short", "long"}
+    if required.difference(parameters):
+        raise ValueError("shock parameters must define parallel, short, and long values")
+    parameter_values = np.asarray([parameters[key] for key in sorted(required)], dtype=float)
+    if not np.isfinite(parameter_values).all() or (parameter_values < 0).any():
+        raise ValueError("shock parameters must be finite and non-negative")
     alpha_short = np.exp(-tenor / decay_years)
     parallel = float(parameters["parallel"])
     short = float(parameters["short"]) * alpha_short
@@ -47,6 +57,8 @@ def build_shocked_curves(
     currency_config = shock_config["currencies"]
     decay = float(shock_config.get("short_rate_decay_years", 4.0))
     floor = float(shock_config.get("post_shock_floor_pct", 0.0))
+    if not np.isfinite(decay) or decay <= 0 or not np.isfinite(floor):
+        raise ValueError("curve shock decay and floor must be finite, with positive decay")
 
     for currency, group in base_curves.groupby("currency", sort=False):
         if currency not in currency_config:
