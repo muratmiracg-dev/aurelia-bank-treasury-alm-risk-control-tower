@@ -32,6 +32,23 @@ def test_unknown_shock_rejected(config):
         shock_bps("unknown", 1.0, config["shocks"]["currencies"]["TRY"])
 
 
+@pytest.mark.parametrize("tenor", [-1.0, np.nan, np.inf])
+def test_invalid_tenors_are_rejected(config, tenor):
+    with pytest.raises(ValueError, match="tenor_years"):
+        shock_bps("parallel_up", tenor, config["shocks"]["currencies"]["TRY"])
+
+
+def test_invalid_decay_and_parameters_are_rejected(config):
+    params = config["shocks"]["currencies"]["TRY"]
+    for decay in (0.0, -1.0, np.nan):
+        with pytest.raises(ValueError, match="decay_years"):
+            shock_bps("short_up", 1.0, params, decay)
+    with pytest.raises(ValueError, match="define"):
+        shock_bps("parallel_up", 1.0, {"parallel": 400.0})
+    with pytest.raises(ValueError, match="finite and non-negative"):
+        shock_bps("parallel_up", 1.0, {**params, "short": np.inf})
+
+
 def test_shocked_curve_count(config, demo):
     curves = build_shocked_curves(demo["market_curves"], config["shocks"])
     assert len(curves) == 57 * 6
