@@ -72,6 +72,26 @@ def test_present_value_simple():
     assert result["present_value_try_mn"].iloc[0] == pytest.approx(100.0)
 
 
+def test_present_value_rejects_invalid_cashflows_and_discount_rates():
+    curve = pd.DataFrame(
+        [
+            {"currency": "TRY", "midpoint_years": 0.0, "base_rate_pct": 10.0},
+            {"currency": "TRY", "midpoint_years": 2.0, "base_rate_pct": 10.0},
+        ]
+    )
+    for tenor, amount in ((-1, 100), (1, np.inf)):
+        with pytest.raises(ValueError, match="cashflow tenors"):
+            present_value(
+                pd.DataFrame([{"currency": "TRY", "time_years": tenor, "cashflow_try_mn": amount}]),
+                curve,
+            )
+    with pytest.raises(ValueError, match="greater than -100"):
+        present_value(
+            pd.DataFrame([{"currency": "TRY", "time_years": 1.0, "cashflow_try_mn": 100.0}]),
+            curve.assign(base_rate_pct=-100.0),
+        )
+
+
 def test_eve_has_six_scenarios(config, demo):
     eve, _ = eve_sensitivity(
         demo["positions"], demo["cashflows"], demo["market_curves"], config["shocks"]

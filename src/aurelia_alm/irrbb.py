@@ -13,11 +13,20 @@ from .shocks import build_shocked_curves, interpolate_rate, shock_bps
 
 def present_value(cashflows: pd.DataFrame, curves: pd.DataFrame) -> pd.DataFrame:
     """Discount signed cash flows by currency using continuously interpolated zero rates."""
+    if cashflows.empty:
+        raise ValueError("cashflows must contain at least one record")
+    values = cashflows[["time_years", "cashflow_try_mn"]].apply(pd.to_numeric, errors="coerce")
+    if not np.isfinite(values.to_numpy()).all() or (values["time_years"] < 0).any():
+        raise ValueError("cashflow tenors and amounts must be finite, with non-negative tenors")
+    cashflows = cashflows.copy()
+    cashflows[values.columns] = values
     frames: list[pd.DataFrame] = []
     for currency, group in cashflows.groupby("currency", sort=False):
         frame = group.copy()
         tenors = frame["time_years"].to_numpy(dtype=float)
         rates = interpolate_rate(curves, currency, tenors) / 100.0
+        if not np.isfinite(rates).all() or (rates <= -1).any():
+            raise ValueError("discount rates must be finite and greater than -100 percent")
         discount_factor = np.power(1.0 + rates, -tenors)
         frame["discount_rate_pct"] = rates * 100.0
         frame["discount_factor"] = discount_factor
