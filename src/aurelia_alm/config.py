@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from pathlib import Path
 from typing import Any
 
@@ -26,6 +27,15 @@ LIQUIDITY_PARAMETER_KEYS = {
 }
 HQLA_LEVELS = {"LEVEL_1", "LEVEL_2A", "LEVEL_2B", "NONE"}
 LIQUIDITY_DAY_GRID = (1, 7, 30, 90, 180, 365)
+RISK_LIMIT_KEYS = {
+    "max_delta_eve_loss_tier1_pct",
+    "max_abs_delta_nii_pct",
+    "min_lcr_proxy_pct",
+    "min_nsfr_proxy_pct",
+    "min_combined_survival_days",
+    "max_fx_open_position_equity_pct",
+    "max_single_currency_eve_contribution_pct",
+}
 
 
 def load_yaml(path: str | Path) -> dict[str, Any]:
@@ -54,6 +64,22 @@ def validate_project_config(config: dict[str, Any]) -> None:
     shocks = config.get("shocks", {}).get("currencies", {})
     fx_rates = assumptions.get("fx_rates", {})
     curves = assumptions.get("curve_calibration", {})
+    limits = config.get("limits", {}).get("limits", {})
+    missing_limits = sorted(RISK_LIMIT_KEYS - set(limits))
+    if missing_limits:
+        raise ConfigurationError(f"Missing governed risk limits: {missing_limits}")
+    for key in RISK_LIMIT_KEYS:
+        value = limits[key]
+        if (
+            isinstance(value, bool)
+            or not isinstance(value, int | float)
+            or not math.isfinite(value)
+        ):
+            raise ConfigurationError(f"Risk limit {key} must be a finite numeric value")
+        if value <= 0:
+            raise ConfigurationError(f"Risk limit {key} must be positive")
+    if not isinstance(limits["min_combined_survival_days"], int):
+        raise ConfigurationError("min_combined_survival_days must be a positive integer")
     missing = [c for c in CURRENCIES if c not in fx_rates or c not in shocks or c not in curves]
     if missing:
         raise ConfigurationError(f"Missing governed currency configuration: {missing}")

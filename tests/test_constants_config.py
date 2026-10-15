@@ -84,6 +84,21 @@ def test_invalid_liquidity_outflow_timing_validation(config):
         validate_project_config(broken)
 
 
+@pytest.mark.parametrize("value", [0, -1, float("nan"), float("inf"), True])
+def test_invalid_risk_limits_are_rejected(config, value):
+    broken = yaml.safe_load(yaml.safe_dump(config))
+    broken["limits"]["limits"]["max_abs_delta_nii_pct"] = value
+    with pytest.raises(ConfigurationError, match="Risk limit"):
+        validate_project_config(broken)
+
+
+def test_survival_limit_requires_integer_days(config):
+    broken = yaml.safe_load(yaml.safe_dump(config))
+    broken["limits"]["limits"]["min_combined_survival_days"] = 30.5
+    with pytest.raises(ConfigurationError, match="positive integer"):
+        validate_project_config(broken)
+
+
 def test_load_project_config_missing_root(tmp_path: Path):
     with pytest.raises(ConfigurationError):
         load_project_config(tmp_path)
