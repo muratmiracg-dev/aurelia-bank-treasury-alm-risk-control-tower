@@ -13,6 +13,10 @@ deposit bank. It links balance-sheet structure to five decision views:
 
 No module executes a trade, changes a limit, or represents a regulatory submission.
 
+The configured ALCO risk limits are required, finite and positive; the survival-horizon limit
+must also be an integer number of days. Invalid or missing limits stop the pipeline before any
+breach status is published.
+
 ## 2. Portfolio boundary
 
 The bank portfolio contains deterministic synthetic assets, liabilities and Tier 1 capital.
