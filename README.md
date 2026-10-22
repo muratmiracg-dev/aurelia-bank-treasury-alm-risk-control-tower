@@ -175,6 +175,8 @@ Set `AURELIA_API_KEY` to require the `X-API-Key` header. See [`.env.example`](.e
 
 ## Methodology and governance
 
+NSFR inputs are validated fail-closed for required schema, supported balance sides, finite non-negative balances, factors in `[0, 1]`, and a positive required-funding denominator.
+
 - [Methodology](docs/methodology.md) documents formulas, sign conventions and model boundaries.
 - [Data provenance](docs/data_provenance.md) records every official source and synthetic classification.
 - [Validation report](docs/validation_report.md) states passed checks and known validation limits.

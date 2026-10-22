@@ -66,14 +66,32 @@ def _hqla(
 
 
 def nsfr_proxy(portfolio: pd.DataFrame) -> dict[str, float]:
+    required = {"side", "balance_try_mn", "asf_factor", "rsf_factor"}
+    missing = sorted(required - set(portfolio.columns))
+    if missing:
+        raise ValueError("NSFR portfolio is missing required columns: " + ", ".join(missing))
+    if portfolio.empty:
+        raise ValueError("NSFR portfolio must not be empty")
+    if not portfolio["side"].isin({"asset", "liability", "equity"}).all():
+        raise ValueError("NSFR side must be asset, liability, or equity")
+    for field in ("balance_try_mn", "asf_factor", "rsf_factor"):
+        values = pd.to_numeric(portfolio[field], errors="coerce")
+        if not np.isfinite(values).all():
+            raise ValueError(f"NSFR {field} must contain only finite numeric values")
+        if field == "balance_try_mn" and (values < 0).any():
+            raise ValueError("NSFR balance_try_mn must be non-negative")
+        if field != "balance_try_mn" and not values.between(0, 1).all():
+            raise ValueError(f"NSFR {field} must be between 0 and 1")
     funding = portfolio.loc[portfolio["side"].isin(["liability", "equity"])].copy()
     assets = portfolio.loc[portfolio["side"] == "asset"].copy()
     asf = float((funding["balance_try_mn"] * funding["asf_factor"]).sum())
     rsf = float((assets["balance_try_mn"] * assets["rsf_factor"]).sum())
+    if rsf <= 0:
+        raise ValueError("NSFR required stable funding must be positive")
     return {
         "available_stable_funding_try_mn": asf,
         "required_stable_funding_try_mn": rsf,
-        "nsfr_proxy_pct": 100.0 * asf / rsf if rsf else np.inf,
+        "nsfr_proxy_pct": 100.0 * asf / rsf,
     }
 
 
