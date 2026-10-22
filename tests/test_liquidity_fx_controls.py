@@ -16,6 +16,29 @@ def test_nsfr_proxy(config, demo):
     assert result["available_stable_funding_try_mn"] > result["required_stable_funding_try_mn"]
 
 
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [
+        ("balance_try_mn", -1.0, "non-negative"),
+        ("balance_try_mn", float("nan"), "finite numeric"),
+        ("asf_factor", 1.01, "between 0 and 1"),
+        ("rsf_factor", -0.01, "between 0 and 1"),
+    ],
+)
+def test_nsfr_proxy_rejects_invalid_financial_inputs(demo, field, value, message):
+    portfolio = demo["positions"].copy()
+    portfolio.loc[portfolio.index[0], field] = value
+    with pytest.raises(ValueError, match=message):
+        nsfr_proxy(portfolio)
+
+
+def test_nsfr_proxy_rejects_zero_required_funding(demo):
+    portfolio = demo["positions"].copy()
+    portfolio.loc[portfolio["side"] == "asset", "rsf_factor"] = 0.0
+    with pytest.raises(ValueError, match="required stable funding must be positive"):
+        nsfr_proxy(portfolio)
+
+
 def test_liquidity_stress_order(config, demo):
     summary, ladder = liquidity_stress(
         demo["positions"], demo["cashflows"], config["assumptions"]["liquidity"]
