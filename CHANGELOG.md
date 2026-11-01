@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+- Fixed the optional live EVDS connector for TCMB's EVDS3 service. The retired
+  `evds2.tcmb.gov.tr/service/evds` endpoint now returns the web application's HTML, and
+  EVDS has required the API key in the `key` HTTP header since April 2024. Requests now
+  go to `https://evds3.tcmb.gov.tr/igmevdsms-dis/` with path-style parameters, and the key
+  is sent only as a header, never in the URL.
+- A non-JSON EVDS response now raises a clear `DataQualityError` naming the EVDS3 base URL.
+- Added network-free tests for the request contract, key handling and response parsing.
+
 ## 1.1.0 - 2026-08-21
 
 - Added a severe exploratory rapid-digital-run liquidity scenario with accelerated

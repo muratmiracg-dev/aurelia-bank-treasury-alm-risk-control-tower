@@ -32,6 +32,34 @@ def load_bddk_snapshot(path: str | Path) -> pd.DataFrame:
     return frame
 
 
+EVDS_DEFAULT_BASE_URL = "https://evds3.tcmb.gov.tr/igmevdsms-dis/"
+
+
+def build_evds_request(
+    series: list[str],
+    start_date: str,
+    end_date: str,
+    *,
+    api_key: str,
+    base_url: str | None = None,
+) -> Request:
+    """Build an EVDS3 series request following the TCMB web-service contract.
+
+    EVDS3 appends parameters to the service path without ``?`` and requires the API
+    key in the ``key`` HTTP header. The key is never placed in the URL, so it does not
+    leak into proxy logs, shell history or error messages.
+    """
+    endpoint = base_url or os.getenv("EVDS_BASE_URL") or EVDS_DEFAULT_BASE_URL
+    params = {
+        "series": "-".join(series),
+        "startDate": start_date,
+        "endDate": end_date,
+        "type": "json",
+    }
+    url = f"{endpoint.rstrip('/')}/{urlencode(params, safe='.-')}"
+    return Request(url, headers={"key": api_key, "User-Agent": "aurelia-alm/1.0"})
+
+
 def fetch_evds_series(
     series: list[str],
     start_date: str,
@@ -51,18 +79,18 @@ def fetch_evds_series(
         raise ConfigurationError("EVDS_API_KEY is required for live EVDS retrieval")
     if not series:
         raise ConfigurationError("At least one EVDS series must be requested")
-    endpoint = base_url or os.getenv("EVDS_BASE_URL", "https://evds2.tcmb.gov.tr/service/evds")
-    params = {
-        "series": "-".join(series),
-        "startDate": start_date,
-        "endDate": end_date,
-        "type": "json",
-        "key": key,
-    }
-    request = Request(f"{endpoint}?{urlencode(params)}", headers={"User-Agent": "aurelia-alm/1.0"})
+    request = build_evds_request(series, start_date, end_date, api_key=key, base_url=base_url)
     with urlopen(request, timeout=timeout_seconds) as response:  # noqa: S310 - governed URL
-        payload: dict[str, Any] = json.loads(response.read().decode("utf-8"))
-    items = payload.get("items")
+        body = response.read().decode("utf-8")
+    try:
+        payload: Any = json.loads(body)
+    except json.JSONDecodeError as exc:
+        # The retired EVDS2 service path answers with the EVDS web application's HTML.
+        raise DataQualityError(
+            "EVDS response was not JSON; check EVDS_BASE_URL points to the EVDS3 "
+            f"service ({EVDS_DEFAULT_BASE_URL})"
+        ) from exc
+    items = payload.get("items") if isinstance(payload, dict) else None
     if not isinstance(items, list):
         raise DataQualityError("EVDS response did not contain an items list")
     return pd.DataFrame(items)
