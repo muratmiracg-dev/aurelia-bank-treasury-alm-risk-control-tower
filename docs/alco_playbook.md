@@ -2,8 +2,9 @@
 
 ## Current management signals
 
-1. **IRRBB - near appetite:** parallel-up EVE loss is TRY 3.09bn, equal to 13.74% of
-   Tier 1 against a 15% illustrative limit.
+1. **IRRBB - near appetite:** parallel-up EVE loss is TRY 3.13bn, equal to 13.89% of
+   Tier 1 against a 15% illustrative limit. Currency losses are summed without offsetting
+   the USD gain (net change across currencies: TRY 3.09bn, 13.74%).
 2. **Earnings - controlled:** parallel-down NII loss is TRY 1.32bn, or 5.81% of
    baseline NII against a 12% limit.
 3. **Liquidity - base compliant, combined stress weak:** base LCR proxy is 158.72%;
@@ -19,7 +20,7 @@
 | Priority | Decision | Evidence | Gate |
 |---|---|---|---|
 | 1 | Reduce structural USD and EUR short position | FX limit breach | Treasurer proposal + ALCO approval |
-| 2 | Review TRY duration hedge | EVE at 13.74% of Tier 1 | Hedge accounting, basis and liquidity review |
+| 2 | Review TRY duration hedge | EVE loss at 13.89% of Tier 1 | Hedge accounting, basis and liquidity review |
 | 3 | Improve combined-stress liquidity buffer | LCR proxy 94.83% | Funding plan and contingency funding actions |
 | 4 | Activate digital-run readiness workstream | 7-day survival; TRY 1.46bn HQLA erosion | Treasury, Operations and Communications tabletop exercise |
 | 5 | Validate NMD beta and decay | Major IRRBB behavioural assumption | Independent model validation |

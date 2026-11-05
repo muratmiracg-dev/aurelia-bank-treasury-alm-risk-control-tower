@@ -25,7 +25,8 @@
 |---|---|
 | Repricing gap | Rate-sensitive assets less liabilities in a time bucket |
 | EVE | Present value of signed banking-book cash flows |
-| Delta EVE | Shocked EVE less baseline EVE |
+| Delta EVE | Shocked EVE less baseline EVE (TOTAL row nets currencies) |
+| EVE loss | `max(0, -Delta EVE)` per currency; TOTAL sums currency losses without cross-currency offset (Basel standardised measure, used for the EVE limit) |
 | NII | One-year interest income less interest expense |
 | LCR proxy | Eligible HQLA divided by 30-day stressed net outflows |
 | Base HQLA | Eligible liquidity buffer after the configured regulatory-style haircut only |

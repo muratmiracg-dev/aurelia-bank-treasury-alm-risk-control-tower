@@ -36,6 +36,20 @@ MINX(
     eve[delta_eve_tier1_pct]
 ) / 100
 
+// Basel standardised measure used for the risk-appetite limit:
+// currency losses summed without offsetting gains in other currencies.
+Worst EVE Loss TRY mn =
+MAXX(
+    FILTER(eve, eve[currency] = "TOTAL"),
+    eve[eve_loss_try_mn]
+)
+
+Worst EVE Loss Tier 1 % =
+MAXX(
+    FILTER(eve, eve[currency] = "TOTAL"),
+    eve[eve_loss_tier1_pct]
+) / 100
+
 Worst Delta NII TRY mn =
 MIN(nii[delta_nii_try_mn])
 

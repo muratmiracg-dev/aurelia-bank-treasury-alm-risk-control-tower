@@ -19,6 +19,8 @@
     "worst_scenario": "parallel_up",
     "worst_delta_eve_try_mn": -3092.376,
     "worst_delta_eve_tier1_pct": -13.744,
+    "worst_eve_loss_try_mn": 3125.792,
+    "worst_eve_loss_tier1_pct": 13.892,
     "baseline_nii_try_mn": 22791.428,
     "worst_nii_scenario": "parallel_down",
     "worst_delta_nii_try_mn": -1324.949,

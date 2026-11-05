@@ -115,3 +115,38 @@ def test_nii_parallel_shocks_are_symmetric(config, demo):
     down = summary.loc[summary["scenario"] == "parallel_down", "delta_nii_try_mn"].iloc[0]
     assert up == pytest.approx(-down)
     assert len(detail) == 2 * len(demo["positions"].query("side != 'equity'"))
+
+
+def test_eve_loss_does_not_offset_gains_across_currencies(config, demo):
+    """Basel standardised EVE: a USD gain must not net against a TRY loss (BCBS d368)."""
+    positions = pd.DataFrame([{"side": "equity", "balance_try_mn": 1_000.0}])
+    cashflows = pd.DataFrame(
+        [
+            {"currency": "TRY", "time_years": 5.0, "cashflow_try_mn": 1_000.0},  # long asset
+            {"currency": "USD", "time_years": 5.0, "cashflow_try_mn": -1_000.0},  # long liability
+        ]
+    )
+    curves = demo["market_curves"].loc[demo["market_curves"]["currency"].isin(["TRY", "USD"])]
+    eve, _ = eve_sensitivity(positions, cashflows, curves, config["shocks"])
+    up = eve.loc[eve["scenario"] == "parallel_up"].set_index("currency")
+    try_delta = up.loc["TRY", "delta_eve_try_mn"]
+    usd_delta = up.loc["USD", "delta_eve_try_mn"]
+    assert try_delta < 0 < usd_delta
+    assert up.loc["TRY", "eve_loss_try_mn"] == pytest.approx(-try_delta)
+    assert up.loc["USD", "eve_loss_try_mn"] == 0.0
+    # Net view offsets; the risk measure must not.
+    assert up.loc["TOTAL", "delta_eve_try_mn"] == pytest.approx(try_delta + usd_delta, abs=1e-5)
+    assert up.loc["TOTAL", "eve_loss_try_mn"] == pytest.approx(-try_delta, abs=1e-5)
+    assert up.loc["TOTAL", "eve_loss_tier1_pct"] == pytest.approx(-try_delta / 10.0, abs=1e-5)
+
+
+def test_demo_eve_loss_total_is_sum_of_currency_losses(config, demo):
+    eve, _ = eve_sensitivity(
+        demo["positions"], demo["cashflows"], demo["market_curves"], config["shocks"]
+    )
+    for scenario, group in eve.groupby("scenario"):
+        currencies = group.loc[group["currency"] != "TOTAL"]
+        total = group.loc[group["currency"] == "TOTAL"].iloc[0]
+        expected = currencies["delta_eve_try_mn"].clip(upper=0).abs().sum()
+        assert total["eve_loss_try_mn"] == pytest.approx(expected, abs=1e-5), scenario
+        assert total["eve_loss_try_mn"] >= -total["delta_eve_try_mn"] - 1e-6, scenario
