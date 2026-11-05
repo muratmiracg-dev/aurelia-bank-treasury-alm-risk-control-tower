@@ -208,3 +208,24 @@ def test_fx_overlay_preserves_signed_hedges(demo):
     assert hedged.loc["USD", "net_open_position_try_mn"] == pytest.approx(
         base.loc["USD", "net_open_position_try_mn"] - 100
     )
+
+
+def test_eve_limit_uses_loss_without_cross_currency_offset(config, demo):
+    """RL02 must breach when currency losses exceed the limit even if gains elsewhere net them."""
+    eve, _ = eve_sensitivity(
+        demo["positions"], demo["cashflows"], demo["market_curves"], config["shocks"]
+    )
+    nii, _ = nii_sensitivity(demo["positions"], config["shocks"], config["assumptions"])
+    liquidity, _ = liquidity_stress(
+        demo["positions"], demo["cashflows"], config["assumptions"]["liquidity"]
+    )
+    limit = float(config["limits"]["limits"]["max_delta_eve_loss_tier1_pct"])
+    stressed = eve.copy()
+    total = (stressed["currency"] == "TOTAL") & (stressed["scenario"] == "parallel_up")
+    # Net decline inside the limit, but gross currency losses above it.
+    stressed.loc[total, "delta_eve_tier1_pct"] = -(limit - 1.0)
+    stressed.loc[total, "eve_loss_tier1_pct"] = limit + 1.0
+    controls = risk_limit_controls(stressed, nii, liquidity, 0.0, config["limits"])
+    rl02 = controls.set_index("control_id").loc["RL02"]
+    assert rl02["status"] == "BREACH"
+    assert rl02["observed"] == pytest.approx(limit + 1.0)

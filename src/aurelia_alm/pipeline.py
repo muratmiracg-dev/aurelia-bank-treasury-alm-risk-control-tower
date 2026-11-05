@@ -92,7 +92,7 @@ def _executive_summary(
         ].sum()
     )
     total_eve = results["eve"].loc[results["eve"]["currency"] == "TOTAL"]
-    worst_eve_row = total_eve.loc[total_eve["delta_eve_try_mn"].idxmin()]
+    worst_eve_row = total_eve.loc[total_eve["eve_loss_try_mn"].idxmax()]
     worst_nii_row = results["nii"].loc[results["nii"]["delta_nii_try_mn"].idxmin()]
     base_liquidity = results["liquidity"].loc[results["liquidity"]["scenario"] == "base"].iloc[0]
     combined_liquidity = (
@@ -123,6 +123,8 @@ def _executive_summary(
             "worst_scenario": str(worst_eve_row["scenario"]),
             "worst_delta_eve_try_mn": round(float(worst_eve_row["delta_eve_try_mn"]), 3),
             "worst_delta_eve_tier1_pct": round(float(worst_eve_row["delta_eve_tier1_pct"]), 3),
+            "worst_eve_loss_try_mn": round(float(worst_eve_row["eve_loss_try_mn"]), 3),
+            "worst_eve_loss_tier1_pct": round(float(worst_eve_row["eve_loss_tier1_pct"]), 3),
             "baseline_nii_try_mn": round(float(worst_nii_row["baseline_nii_try_mn"]), 3),
             "worst_nii_scenario": str(worst_nii_row["scenario"]),
             "worst_delta_nii_try_mn": round(float(worst_nii_row["delta_nii_try_mn"]), 3),

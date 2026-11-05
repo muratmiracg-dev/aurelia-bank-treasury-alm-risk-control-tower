@@ -41,7 +41,13 @@ def eve_sensitivity(
     base_curves: pd.DataFrame,
     shock_config: dict[str, Any],
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Calculate EVE under all six Basel prescribed shocks."""
+    """Calculate EVE under all six Basel prescribed shocks.
+
+    ``delta_eve_*`` is the signed change (net across currencies on the ``TOTAL`` row, a
+    management view). ``eve_loss_*`` is the Basel standardised risk measure: each currency
+    contributes only its loss, ``max(0, -delta EVE)``, and the ``TOTAL`` row sums those
+    losses, so a gain in one currency never offsets a loss in another (BCBS d368).
+    """
     baseline_detail = present_value(cashflows, base_curves)
     baseline_by_currency = baseline_detail.groupby("currency")["present_value_try_mn"].sum()
     shocked_curves = build_shocked_curves(base_curves, shock_config)
@@ -51,10 +57,13 @@ def eve_sensitivity(
     for scenario, scenario_curves in shocked_curves.groupby("scenario", sort=False):
         shocked_detail = present_value(cashflows, scenario_curves)
         shocked_by_currency = shocked_detail.groupby("currency")["present_value_try_mn"].sum()
+        scenario_loss = 0.0
         for currency in baseline_by_currency.index:
             baseline = float(baseline_by_currency[currency])
             shocked = float(shocked_by_currency[currency])
             delta = shocked - baseline
+            loss = max(0.0, -delta)
+            scenario_loss += loss
             rows.append(
                 {
                     "scenario": scenario,
@@ -63,6 +72,8 @@ def eve_sensitivity(
                     "shocked_eve_try_mn": shocked,
                     "delta_eve_try_mn": delta,
                     "delta_eve_tier1_pct": 100.0 * delta / tier1,
+                    "eve_loss_try_mn": loss,
+                    "eve_loss_tier1_pct": 100.0 * loss / tier1,
                 }
             )
         total_baseline = float(baseline_by_currency.sum())
@@ -76,6 +87,8 @@ def eve_sensitivity(
                 "shocked_eve_try_mn": total_shocked,
                 "delta_eve_try_mn": total_delta,
                 "delta_eve_tier1_pct": 100.0 * total_delta / tier1,
+                "eve_loss_try_mn": scenario_loss,
+                "eve_loss_tier1_pct": 100.0 * scenario_loss / tier1,
             }
         )
     result = pd.DataFrame(rows)

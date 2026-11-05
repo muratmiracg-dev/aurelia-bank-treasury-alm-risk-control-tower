@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Fixed the IRRBB EVE risk measure. The limit control (RL02) and the executive summary
+  netted currency gains against losses on the `TOTAL` row; the Basel standardised framework
+  sums currency losses without cross-currency offset. `eve.csv` gains `eve_loss_try_mn` and
+  `eve_loss_tier1_pct`; the worst EVE loss moves from 13.74% to 13.89% of Tier 1 (parallel
+  up, still within the 15% limit). The netted `delta_eve_*` columns are kept as the
+  management view. SQL schema/view, Power BI measures, executive figure and docs updated.
+  The committed workbook, executive deck and PDF report are static snapshots built outside
+  this pipeline and still quote the netted 13.7%; they are refreshed with the next release.
+
 - Fixed the optional live EVDS connector for TCMB's EVDS3 service. The retired
   `evds2.tcmb.gov.tr/service/evds` endpoint now returns the web application's HTML, and
   EVDS has required the API key in the `key` HTTP header since April 2024. Requests now

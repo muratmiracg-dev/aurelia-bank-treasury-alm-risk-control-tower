@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/muratmiracg-dev/aurelia-bank-treasury-alm-risk-control-tower/actions/workflows/ci.yml/badge.svg)](https://github.com/muratmiracg-dev/aurelia-bank-treasury-alm-risk-control-tower/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/muratmiracg-dev/aurelia-bank-treasury-alm-risk-control-tower/actions/workflows/codeql.yml/badge.svg)](https://github.com/muratmiracg-dev/aurelia-bank-treasury-alm-risk-control-tower/actions/workflows/codeql.yml)
-[![Tests](https://img.shields.io/badge/tests-46%20passed-15803D)](tests)
+[![Tests](https://img.shields.io/badge/tests-95%20passed-15803D)](tests)
 [![Coverage](https://img.shields.io/badge/coverage-93.88%25-15803D)](docs/validation_report.md)
 [![Python](https://img.shields.io/badge/python-3.11%2B-3776AB)](pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0E7490)](LICENSE)
@@ -21,7 +21,8 @@ The model identifies one formal risk-appetite breach and one management early wa
 - Combined-stress LCR proxy falls to **94.8%** and the survival horizon reaches the **30-day** floor.
 - The severe exploratory rapid-digital-run scenario reduces the LCR proxy to **78.1%**,
   shortens survival to **7 days** and applies a **TRY 1.46bn** HQLA market-value loss.
-- Worst EVE loss is **13.7% of Tier 1**, inside the **15.0%** limit but with limited headroom.
+- Worst EVE loss is **13.9% of Tier 1** (parallel up, Basel aggregation without cross-currency
+  offset), inside the **15.0%** limit but with limited headroom.
 - Maximum absolute 12-month NII sensitivity is **5.8%**, inside the **12.0%** limit.
 
 The ALCO response is explicit: remediate FX first, protect liquidity second, then validate the indicative TRY duration hedge before execution.
@@ -58,11 +59,15 @@ Credit-risk projects show how a bank evaluates customers. This project shows how
 
 All amounts are TRY million unless stated otherwise. The snapshot is reproducible with seed `20260819` and data cutoff `2026-08-19`.
 
+> The EVE limit uses the Basel standardised aggregation (currency losses summed, no
+> cross-currency offset). The committed workbook, executive deck and PDF report are static
+> snapshots that still quote the netted 13.7%; the regenerated CSV/JSON results are authoritative.
+
 | Metric | Result | Threshold | Status |
 |---|---:|---:|---|
 | Total assets | 180,000.0 | Accounting identity | Reconciled |
 | Customer deposits | 120,500.0 | n/a | Base funding source |
-| Worst Delta EVE | (3,092.4) | 15.0% of Tier 1 | 13.7% - within limit |
+| Worst EVE loss (no cross-currency offset) | (3,125.8) | 15.0% of Tier 1 | 13.9% - within limit |
 | Worst Delta NII | (1,324.9) | 12.0% of baseline NII | 5.8% - within limit |
 | Base LCR proxy | 158.7% | 100.0% | Within formal control |
 | Combined LCR proxy | 94.8% | 100.0% management floor | Early warning |
@@ -73,7 +78,7 @@ All amounts are TRY million unless stated otherwise. The snapshot is reproducibl
 | NSFR proxy | 143.4% | 100.0% | Within limit |
 | Aggregate FX open / equity | 33.3% | 20.0% | **Breach** |
 | Data-quality controls | 10 / 10 | All pass | Pass |
-| Automated tests | 46 | 90% coverage gate | 93.88% line coverage |
+| Automated tests | 95 | 90% coverage gate | 95.8% line coverage |
 
 ## Data architecture
 
@@ -125,7 +130,7 @@ make verify
 `make verify` performs the full quality gate:
 
 1. checks formatting and lint rules with Ruff;
-2. runs the 46-test Pytest suite with a 90% coverage threshold;
+2. runs the 95-test Pytest suite with a 90% coverage threshold;
 3. regenerates deterministic demo data and analytical outputs;
 4. validates required files, control results and SHA-256 checksums.
 
@@ -201,7 +206,7 @@ NSFR inputs are validated fail-closed for required schema, supported balance sid
 - configuration-driven assumptions and limits;
 - typed package, CLI and read-only FastAPI service;
 - SQLite and SQL analytical layers;
-- 46 automated tests and a 90% line-coverage gate;
+- 95 automated tests and a 90% line-coverage gate;
 - Ruff formatting and linting;
 - GitHub Actions CI and CodeQL security analysis;
 - Dockerfile and Compose configuration;

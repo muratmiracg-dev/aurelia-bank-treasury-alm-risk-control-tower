@@ -128,7 +128,8 @@ def risk_limit_controls(
 ) -> pd.DataFrame:
     limits = limits_config["limits"]
     total_eve = eve.loc[eve["currency"] == "TOTAL"]
-    worst_eve_loss = max(0.0, -float(total_eve["delta_eve_tier1_pct"].min()))
+    # Basel standardised EVE measure: currency losses are summed without offsetting gains.
+    worst_eve_loss = max(0.0, float(total_eve["eve_loss_tier1_pct"].max()))
     worst_nii = float(nii["delta_nii_pct"].abs().max())
     combined = liquidity.loc[liquidity["scenario"] == "combined"].iloc[0]
     scenarios_present = set(total_eve["scenario"]) == set(EVE_SCENARIOS)
@@ -136,7 +137,7 @@ def risk_limit_controls(
         ("RL01", "six prescribed EVE scenarios are present", scenarios_present, len(total_eve), 6),
         (
             "RL02",
-            "maximum EVE decline / Tier 1",
+            "maximum EVE loss (no cross-currency offset) / Tier 1",
             worst_eve_loss <= float(limits["max_delta_eve_loss_tier1_pct"]),
             worst_eve_loss,
             limits["max_delta_eve_loss_tier1_pct"],

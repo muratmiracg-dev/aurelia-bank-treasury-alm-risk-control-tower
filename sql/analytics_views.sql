@@ -8,10 +8,10 @@ FROM aurelia_alm.position
 GROUP BY side, currency, product;
 
 CREATE OR REPLACE VIEW aurelia_alm.v_worst_eve_loss AS
-SELECT scenario, delta_eve_try_mn, delta_eve_tier1_pct
+SELECT scenario, eve_loss_try_mn, eve_loss_tier1_pct, delta_eve_try_mn, delta_eve_tier1_pct
 FROM aurelia_alm.eve_result
 WHERE currency = 'TOTAL'
-ORDER BY delta_eve_try_mn ASC
+ORDER BY eve_loss_try_mn DESC
 LIMIT 1;
 
 CREATE OR REPLACE VIEW aurelia_alm.v_liquidity_stress AS

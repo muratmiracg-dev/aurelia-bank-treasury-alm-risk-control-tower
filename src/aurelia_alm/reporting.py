@@ -69,7 +69,7 @@ def _plot_eve(frame: pd.DataFrame, path: Path) -> Path:
     bars = ax.bar(total["scenario_label"], total["delta_eve_try_mn"], color=colors)
     ax.axhline(0, color=NAVY, linewidth=1)
     ax.set_title("IRRBB economic value sensitivity - six prescribed scenarios")
-    ax.set_ylabel("Delta EVE (TRY million)")
+    ax.set_ylabel("Delta EVE, net across currencies (TRY million)")
     ax.tick_params(axis="x", rotation=20)
     ax.grid(axis="y")
     ax.bar_label(bars, fmt="%+.0f", padding=3, fontsize=9)
@@ -149,11 +149,15 @@ def _plot_executive(results: dict[str, pd.DataFrame], path: Path) -> Path:
     eve = results["eve"].loc[results["eve"]["currency"] == "TOTAL"]
     axes[0, 0].bar(
         eve["scenario"].str.replace("_", " "),
-        eve["delta_eve_tier1_pct"],
-        color=[RED if value < 0 else TEAL for value in eve["delta_eve_tier1_pct"]],
+        eve["eve_loss_tier1_pct"],
+        color=[RED if value > 0 else TEAL for value in eve["eve_loss_tier1_pct"]],
     )
+    controls = results.get("risk_limit_controls")
+    if controls is not None and "RL02" in set(controls["control_id"]):
+        eve_limit = float(controls.loc[controls["control_id"] == "RL02", "limit"].iloc[0])
+        axes[0, 0].axhline(eve_limit, color=NAVY, linestyle="--", linewidth=1)
     axes[0, 0].axhline(0, color=NAVY, linewidth=1)
-    axes[0, 0].set_title("Delta EVE / Tier 1")
+    axes[0, 0].set_title("EVE loss / Tier 1 (no cross-currency offset)")
     axes[0, 0].set_ylabel("Percent")
     axes[0, 0].tick_params(axis="x", rotation=20)
 

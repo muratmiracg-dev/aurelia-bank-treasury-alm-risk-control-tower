@@ -47,6 +47,13 @@ are parallel up, parallel down, steepener, flattener, short-rate up and short-ra
 TRY, USD and EUR shocks use the July 2024 Basel recalibration effective from 1 January
 2026. Results are measured both in TRY million and as a share of synthetic Tier 1 capital.
 
+Two aggregates are reported per scenario. `delta_eve_*` on the `TOTAL` row is the signed
+change netted across currencies (management view). The risk measure used for the
+risk-appetite limit and the executive summary is `eve_loss_*`: following the Basel
+standardised framework, each currency contributes only its loss, `max(0, -delta EVE)`,
+and losses are summed, so a gain in one currency never offsets a loss in another. The
+EVE limit control (RL02) compares the worst scenario's `eve_loss_tier1_pct` with the limit.
+
 ## 5. Earnings view
 
 NII uses a one-year static-balance-sheet horizon. Positions that reprice within the year

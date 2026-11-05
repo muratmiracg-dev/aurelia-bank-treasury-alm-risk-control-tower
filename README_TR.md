@@ -14,7 +14,8 @@ Model bir resmî risk iştahı ihlali ve bir yönetim erken uyarısı üretiyor:
 - Birleşik stres altında LCR vekil oranı **%94,8'e** düşüyor ve hayatta kalma süresi **30 günlük** tabana ulaşıyor.
 - Ağır fakat keşif amaçlı hızlı dijital mevduat çıkışı senaryosunda LCR vekili **%78,1'e**,
   hayatta kalma süresi **7 güne** düşüyor ve HQLA tamponu **1,46 milyar TL** ek değer kaybediyor.
-- En kötü EVE kaybı Tier 1 sermayenin **%13,7'si**; **%15,0** limitin içinde fakat tampon sınırlı.
+- En kötü EVE kaybı Tier 1 sermayenin **%13,9'u** (paralel artış; Basel toplamasında para birimleri
+  arasında kazanç-kayıp mahsubu yapılmaz); **%15,0** limitin içinde fakat tampon sınırlı.
 - Bir yıllık en yüksek mutlak NII duyarlılığı **%5,8**; **%12,0** limitin içinde.
 
 ALCO aksiyonu nettir: önce FX riskini azalt, sonra likidite tamponunu koru, son olarak TRY duration hedge büyüklüğünü doğrula ve ancak yönetişim kontrollerinden sonra işleme al.
@@ -44,7 +45,7 @@ Tutarlar aksi belirtilmedikçe milyon TL'dir. Üretim tohumu `20260819`, veri ke
 |---|---:|---:|---|
 | Toplam aktif | 180.000,0 | Muhasebe eşitliği | Mutabık |
 | Mevduat | 120.500,0 | - | Ana fonlama kaynağı |
-| En kötü Delta EVE | (3.092,4) | Tier 1'in %15,0'i | %13,7 - limit içinde |
+| En kötü EVE kaybı (para birimleri arası mahsupsuz) | (3.125,8) | Tier 1'in %15,0'i | %13,9 - limit içinde |
 | En kötü Delta NII | (1.324,9) | NII'nin %12,0'si | %5,8 - limit içinde |
 | Baz LCR vekili | %158,7 | %100,0 | Limit içinde |
 | Birleşik LCR vekili | %94,8 | %100,0 yönetim tabanı | Erken uyarı |
@@ -55,7 +56,7 @@ Tutarlar aksi belirtilmedikçe milyon TL'dir. Üretim tohumu `20260819`, veri ke
 | NSFR vekili | %143,4 | %100,0 | Limit içinde |
 | FX açık pozisyon / özkaynak | %33,3 | %20,0 | **İhlal** |
 | Veri kalitesi kontrolleri | 10 / 10 | Tamamı geçmeli | Başarılı |
-| Otomatik testler | 46 | %90 kapsam eşiği | %93,88 satır kapsamı |
+| Otomatik testler | 95 | %90 kapsam eşiği | %95,8 satır kapsamı |
 
 ## Veri yaklaşımı
 
@@ -103,7 +104,7 @@ Salt okunur API'yi başlatmak için:
 make api
 ```
 
-`make verify`; Ruff kalite kontrolünü, 46 Pytest testini, %90 kapsam eşiğini, deterministik veri üretimini ve SHA-256 dosya doğrulamasını birlikte çalıştırır.
+`make verify`; Ruff kalite kontrolünü, 95 Pytest testini, %90 kapsam eşiğini, deterministik veri üretimini ve SHA-256 dosya doğrulamasını birlikte çalıştırır.
 
 ## Yöntem ve yönetişim dokümanları
 

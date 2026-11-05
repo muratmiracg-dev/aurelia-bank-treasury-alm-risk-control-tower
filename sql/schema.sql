@@ -39,6 +39,8 @@ CREATE TABLE IF NOT EXISTS aurelia_alm.eve_result (
     shocked_eve_try_mn numeric(20, 6) NOT NULL,
     delta_eve_try_mn numeric(20, 6) NOT NULL,
     delta_eve_tier1_pct numeric(12, 6) NOT NULL,
+    eve_loss_try_mn numeric(20, 6) NOT NULL CHECK (eve_loss_try_mn >= 0),
+    eve_loss_tier1_pct numeric(12, 6) NOT NULL CHECK (eve_loss_tier1_pct >= 0),
     PRIMARY KEY (scenario, currency)
 );
 
