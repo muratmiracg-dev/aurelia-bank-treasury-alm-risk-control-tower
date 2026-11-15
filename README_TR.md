@@ -104,7 +104,7 @@ Salt okunur API'yi başlatmak için:
 make api
 ```
 
-`make verify`; Ruff kalite kontrolünü, 95 Pytest testini, %90 kapsam eşiğini, deterministik veri üretimini ve SHA-256 dosya doğrulamasını birlikte çalıştırır.
+`make verify`; Ruff kalite kontrolünü, 97 Pytest testini ve %90 kapsam eşiğini çalıştırır, kayıtlı dosyaları SHA-256 ile doğrular, demoyu yeniden üretip her CSV, JSON ve SQLite tablosunu kayıtlı değerlerle karşılaştırır (`scripts/compare_outputs.py`).
 
 ## Yöntem ve yönetişim dokümanları
 

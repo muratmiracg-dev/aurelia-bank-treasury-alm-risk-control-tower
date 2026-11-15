@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- CI now proves that the committed outputs are reproducible. Before, `pytest` and
+  `scripts/run_demo.py` both rewrote `artifacts/`, `data/demo/` and `MANIFEST.sha256` in the
+  checkout before `verify_artifacts.py` ran, so stale or edited committed results always
+  passed. CI and `make verify` now check the committed files against the committed manifest
+  first, then regenerate and compare every CSV, JSON and SQLite table with the committed values
+  (`scripts/compare_outputs.py`). Pipeline tests run in a temporary root.
+- CI test matrix adds Python 3.13.
 - Fixed the IRRBB EVE risk measure. The limit control (RL02) and the executive summary
   netted currency gains against losses on the `TOTAL` row; the Basel standardised framework
   sums currency losses without cross-currency offset. `eve.csv` gains `eve_loss_try_mn` and

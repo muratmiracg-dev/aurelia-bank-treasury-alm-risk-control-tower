@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/muratmiracg-dev/aurelia-bank-treasury-alm-risk-control-tower/actions/workflows/ci.yml/badge.svg)](https://github.com/muratmiracg-dev/aurelia-bank-treasury-alm-risk-control-tower/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/muratmiracg-dev/aurelia-bank-treasury-alm-risk-control-tower/actions/workflows/codeql.yml/badge.svg)](https://github.com/muratmiracg-dev/aurelia-bank-treasury-alm-risk-control-tower/actions/workflows/codeql.yml)
-[![Tests](https://img.shields.io/badge/tests-95%20passed-15803D)](tests)
+[![Tests](https://img.shields.io/badge/tests-97%20passed-15803D)](tests)
 [![Coverage](https://img.shields.io/badge/coverage-93.88%25-15803D)](docs/validation_report.md)
 [![Python](https://img.shields.io/badge/python-3.11%2B-3776AB)](pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0E7490)](LICENSE)
@@ -78,7 +78,7 @@ All amounts are TRY million unless stated otherwise. The snapshot is reproducibl
 | NSFR proxy | 143.4% | 100.0% | Within limit |
 | Aggregate FX open / equity | 33.3% | 20.0% | **Breach** |
 | Data-quality controls | 10 / 10 | All pass | Pass |
-| Automated tests | 95 | 90% coverage gate | 95.8% line coverage |
+| Automated tests | 97 | 90% coverage gate | 95.8% line coverage |
 
 ## Data architecture
 
@@ -130,9 +130,11 @@ make verify
 `make verify` performs the full quality gate:
 
 1. checks formatting and lint rules with Ruff;
-2. runs the 95-test Pytest suite with a 90% coverage threshold;
-3. regenerates deterministic demo data and analytical outputs;
-4. validates required files, control results and SHA-256 checksums.
+2. runs the 97-test Pytest suite with a 90% coverage threshold;
+3. validates the committed files, control results and SHA-256 checksums;
+4. regenerates the deterministic demo and compares every regenerated CSV, JSON and SQLite
+   table with the committed values (`scripts/compare_outputs.py`, relative tolerance 1e-9);
+5. re-validates the regenerated pack.
 
 Run individual workflows:
 
