@@ -16,7 +16,14 @@ quality:
 	ruff format --check .
 	ruff check .
 
-verify: quality coverage demo
+verify: quality coverage
+	python scripts/verify_artifacts.py
+	rm -rf tmp/committed && mkdir -p tmp/committed/artifacts
+	cp -r data tmp/committed/data
+	cp -r artifacts/results tmp/committed/artifacts/results
+	cp artifacts/aurelia_alm_demo.sqlite tmp/committed/artifacts/
+	python scripts/run_demo.py
+	python scripts/compare_outputs.py tmp/committed
 	python scripts/verify_artifacts.py
 
 api:
