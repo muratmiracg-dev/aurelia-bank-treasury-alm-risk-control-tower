@@ -31,8 +31,8 @@
     "combined_lcr_proxy_pct": 94.834,
     "rapid_digital_run_lcr_proxy_pct": 78.092,
     "nsfr_proxy_pct": 143.354,
-    "combined_survival_horizon_days": 30,
-    "rapid_digital_run_survival_horizon_days": 7,
+    "combined_survival_horizon_days": 27,
+    "rapid_digital_run_survival_horizon_days": 5,
     "rapid_digital_run_hqla_market_value_loss_try_mn": 1460.0
   },
   "fx": {
@@ -41,7 +41,7 @@
   "controls": {
     "data_quality_passed": 10,
     "data_quality_total": 10,
-    "risk_limit_breaches": 1,
+    "risk_limit_breaches": 2,
     "risk_limits_total": 7
   }
 }

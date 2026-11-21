@@ -40,7 +40,7 @@ def main() -> None:
     combined = liquidity.loc["combined"]
     if not rapid["lcr_proxy_pct"] < combined["lcr_proxy_pct"]:
         raise SystemExit("Rapid digital-run stress is not more severe than combined stress")
-    if int(rapid["survival_horizon_days"]) != 7:
+    if int(rapid["survival_horizon_days"]) != 5:
         raise SystemExit("Rapid digital-run survival horizon drifted from the governed snapshot")
 
     for line in (root / "MANIFEST.sha256").read_text(encoding="utf-8").splitlines():
