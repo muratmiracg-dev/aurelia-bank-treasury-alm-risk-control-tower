@@ -11,6 +11,26 @@ DAY_GRID = (1, 7, 30, 90, 180, 365)
 DEFAULT_OUTFLOW_TIMING = {1: 0.25, 7: 0.55, 30: 1.00, 90: 1.15, 180: 1.25, 365: 1.40}
 
 
+def survival_horizon_days(net_by_day: list[tuple[int, float]], opening_liquidity: float) -> int:
+    """Whole days survived before cumulative net liquidity first turns negative.
+
+    ``net_by_day`` holds (day, cumulative net liquidity) on the governed grid. Between grid
+    points the position is interpolated linearly from day 0 (opening liquidity), and the
+    result is the last whole day before the crossing. A position that never turns negative
+    returns the last grid day. Reporting the first negative grid day instead would credit
+    survival up to a day on which the bank has already run out of liquidity.
+    """
+    previous_day, previous_net = 0, float(opening_liquidity)
+    if previous_net < 0:
+        return 0
+    for day, net in net_by_day:
+        if net < 0:
+            crossing = previous_day + (day - previous_day) * previous_net / (previous_net - net)
+            return int(np.floor(crossing))
+        previous_day, previous_net = day, float(net)
+    return int(net_by_day[-1][0])
+
+
 def _validate_scenario_parameters(scenario: str, params: dict[str, Any]) -> None:
     probability_fields = (
         "demand_deposit_runoff",
@@ -166,7 +186,7 @@ def liquidity_stress(
         net_outflows = max(outflows_30d - capped_inflows, 1e-9)
         lcr = 100.0 * hqla / net_outflows
 
-        survival_days = 365
+        net_by_day: list[tuple[int, float]] = []
         for day in DAY_GRID:
             inflows = float(
                 positive_cashflows.loc[
@@ -186,8 +206,8 @@ def liquidity_stress(
                     "cumulative_net_liquidity_try_mn": cumulative_net,
                 }
             )
-            if cumulative_net < 0 and survival_days == 365:
-                survival_days = day
+            net_by_day.append((day, cumulative_net))
+        survival_days = survival_horizon_days(net_by_day, hqla)
 
         summary_rows.append(
             {

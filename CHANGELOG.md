@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- The liquidity survival horizon was the first ladder day with *negative* cumulative net
+  liquidity, so it credited survival up to a day on which the bank had already run out. The
+  combined scenario is TRY 24.95bn positive on day 7 and TRY 3.24bn negative on day 30, yet it
+  reported a 30-day horizon and RL06 (minimum 30 days) passed "at floor". The horizon is now the
+  last whole day before the first shortfall, interpolated linearly between ladder points:
+  combined 30 -> **27 days, RL06 breach** (2 risk-limit breaches instead of 1); rapid digital
+  run 7 -> 5 days. README, ALCO playbook, methodology, validation report and scenario note are
+  updated; the Excel workbench, deck and PDF report still show the previous figures.
 - CI now proves that the committed outputs are reproducible. Before, `pytest` and
   `scripts/run_demo.py` both rewrote `artifacts/`, `data/demo/` and `MANIFEST.sha256` in the
   checkout before `verify_artifacts.py` ran, so stale or edited committed results always

@@ -71,7 +71,9 @@ The liquidity module calculates:
 - fail-closed validation of runoff, drawdown, inflow-realisation, HQLA-shock, and cumulative
   outflow-timing assumptions before stress results are produced;
 - an LCR decision proxy;
-- cumulative survival horizon; and
+- cumulative survival horizon: the last whole day before cumulative net liquidity (HQLA plus
+  realised inflows minus cumulative outflows) first turns negative, interpolated linearly
+  between ladder points from day 0; a ladder that never turns negative reports 365 days; and
 - an NSFR decision proxy from visible ASF/RSF factors.
 
 The fifth scenario, `rapid_digital_run`, is a severe exploratory management stress. It

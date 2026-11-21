@@ -15,17 +15,18 @@
 
 ## Executive finding
 
-The model identifies one formal risk-appetite breach and one management early warning:
+The model identifies two formal risk-appetite breaches and one management early warning:
 
 - Aggregate absolute FX open position is **33.3% of equity**, above the **20.0%** internal limit.
-- Combined-stress LCR proxy falls to **94.8%** and the survival horizon reaches the **30-day** floor.
+- Combined stress exhausts liquidity on **day 27**, short of the **30-day** survival floor
+  (**breach**), and its LCR proxy falls to **94.8%**.
 - The severe exploratory rapid-digital-run scenario reduces the LCR proxy to **78.1%**,
-  shortens survival to **7 days** and applies a **TRY 1.46bn** HQLA market-value loss.
+  shortens survival to **5 days** and applies a **TRY 1.46bn** HQLA market-value loss.
 - Worst EVE loss is **13.9% of Tier 1** (parallel up, Basel aggregation without cross-currency
   offset), inside the **15.0%** limit but with limited headroom.
 - Maximum absolute 12-month NII sensitivity is **5.8%**, inside the **12.0%** limit.
 
-The ALCO response is explicit: remediate FX first, protect liquidity second, then validate the indicative TRY duration hedge before execution.
+The ALCO response is explicit: remediate FX and the combined-stress survival shortfall first, then validate the indicative TRY duration hedge before execution.
 
 > This repository is a portfolio-grade analytical demonstration. Aurelia Bank is fictional; bank positions and cash flows are controlled synthetic records. LCR and NSFR outputs are transparent proxies, not regulatory returns. Hedge outputs are decision-support recommendations, not executable trade instructions.
 
@@ -71,9 +72,9 @@ All amounts are TRY million unless stated otherwise. The snapshot is reproducibl
 | Worst Delta NII | (1,324.9) | 12.0% of baseline NII | 5.8% - within limit |
 | Base LCR proxy | 158.7% | 100.0% | Within formal control |
 | Combined LCR proxy | 94.8% | 100.0% management floor | Early warning |
-| Combined survival horizon | 30 days | 30 days | At floor |
+| Combined survival horizon | 27 days | 30 days | **Breach** |
 | Rapid digital-run LCR proxy | 78.1% | Exploratory scenario | Severe management stress |
-| Rapid digital-run survival | 7 days | Exploratory scenario | Contingency funding trigger |
+| Rapid digital-run survival | 5 days | Exploratory scenario | Contingency funding trigger |
 | Rapid digital-run HQLA loss | 1,460.0 | Exploratory scenario | Market-liquidity overlay |
 | NSFR proxy | 143.4% | 100.0% | Within limit |
 | Aggregate FX open / equity | 33.3% | 20.0% | **Breach** |

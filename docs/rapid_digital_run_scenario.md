@@ -48,11 +48,11 @@ The HQLA formula is:
 | HQLA market-value loss | TRY 1.46bn |
 | Gross 30-day outflows | TRY 74.20bn |
 | LCR proxy | 78.09% |
-| Survival horizon | 7 days |
+| Survival horizon | 5 days |
 
 ## ALCO interpretation
 
-The result is a vulnerability signal, not a forecast. A seven-day survival horizon calls for
+The result is a vulnerability signal, not a forecast. A five-day survival horizon calls for
 an executable contingency funding playbook: pre-position collateral, confirm central-bank and
 secured-funding operational readiness, protect unencumbered HQLA, establish intraday liquidity
 monitoring and coordinate customer-communication escalation. Owners, limits and execution

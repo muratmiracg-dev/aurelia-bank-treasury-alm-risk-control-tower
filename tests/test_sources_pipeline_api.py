@@ -77,7 +77,7 @@ def test_pipeline_integration(pipeline_root: Path):
     )
     assert summary["balance_sheet"]["assets_try_mn"] == 180_000
     assert summary["controls"]["data_quality_passed"] == 10
-    assert summary["controls"]["risk_limit_breaches"] == 1
+    assert summary["controls"]["risk_limit_breaches"] == 2
     assert (pipeline_root / "artifacts/aurelia_alm_demo.sqlite").exists()
 
 
@@ -125,7 +125,7 @@ def test_api_read_only_outputs(pipeline_root: Path, monkeypatch):
     liquidity = client.get("/api/v1/liquidity").json()
     assert len(liquidity) == 5
     rapid = next(row for row in liquidity if row["scenario"] == "rapid_digital_run")
-    assert rapid["survival_horizon_days"] == 7
+    assert rapid["survival_horizon_days"] == 5
     assert len(client.get("/api/v1/hedges").json()) == 5
 
 

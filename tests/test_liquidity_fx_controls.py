@@ -7,7 +7,7 @@ from aurelia_alm.controls import data_quality_controls, risk_limit_controls
 from aurelia_alm.fx import aggregate_fx_limit_ratio, fx_open_position
 from aurelia_alm.hedging import propose_hedges
 from aurelia_alm.irrbb import dv01_by_currency, eve_sensitivity, nii_sensitivity
-from aurelia_alm.liquidity import liquidity_stress, nsfr_proxy
+from aurelia_alm.liquidity import liquidity_stress, nsfr_proxy, survival_horizon_days
 
 
 def test_nsfr_proxy(config, demo):
@@ -47,7 +47,7 @@ def test_liquidity_stress_order(config, demo):
     combined = summary.set_index("scenario").loc["combined", "lcr_proxy_pct"]
     rapid = summary.set_index("scenario").loc["rapid_digital_run"]
     assert base > combined > rapid["lcr_proxy_pct"]
-    assert rapid["survival_horizon_days"] == 7
+    assert rapid["survival_horizon_days"] == 5
     assert rapid["hqla_market_value_loss_try_mn"] > 0
     assert len(ladder) == 30
     assert set(summary["scenario"]) == {
@@ -188,7 +188,7 @@ def test_risk_limits_show_fx_breach(config, demo):
     ratio = aggregate_fx_limit_ratio(fx, 22_500)
     controls = risk_limit_controls(eve, nii, liquidity, ratio, config["limits"])
     breaches = controls.loc[controls["status"] == "BREACH", "control_id"].tolist()
-    assert breaches == ["RL07"]
+    assert breaches == ["RL06", "RL07"]
 
 
 @pytest.mark.parametrize("amount", [float("nan"), float("inf"), -float("inf"), True])
@@ -229,3 +229,30 @@ def test_eve_limit_uses_loss_without_cross_currency_offset(config, demo):
     rl02 = controls.set_index("control_id").loc["RL02"]
     assert rl02["status"] == "BREACH"
     assert rl02["observed"] == pytest.approx(limit + 1.0)
+
+
+def test_survival_horizon_stops_before_the_first_shortfall():
+    # Positive on day 7, negative on day 30: the bank has run out before day 30, so a
+    # 30-day horizon (the first negative grid day) would overstate survival.
+    ladder = [(1, 40.0), (7, 24_950.2), (30, -3_236.0), (90, 16_688.5)]
+    assert survival_horizon_days(ladder, 59_400.0) == 27  # 7 + 23 * 24950.2 / 28186.2
+
+
+def test_survival_horizon_edge_cases():
+    assert survival_horizon_days([(1, 10.0), (7, 5.0), (365, 1.0)], 20.0) == 365
+    assert survival_horizon_days([(1, -1.0)], 3.0) == 0  # crosses at 0.75 days
+    assert survival_horizon_days([(1, 5.0), (7, -5.0)], 10.0) == 4
+    assert survival_horizon_days([(1, 5.0)], -1.0) == 0
+    # Exactly zero is not a shortfall.
+    assert survival_horizon_days([(1, 0.0), (7, 0.0), (30, -6.0)], 1.0) == 7
+
+
+def test_combined_stress_survival_reflects_ladder(config, demo):
+    summary, ladder = liquidity_stress(
+        demo["positions"], demo["cashflows"], config["assumptions"]["liquidity"]
+    )
+    combined = ladder.loc[ladder["scenario"] == "combined"].set_index("day")
+    horizon = summary.set_index("scenario").loc["combined", "survival_horizon_days"]
+    negative_days = combined.index[combined["cumulative_net_liquidity_try_mn"] < 0]
+    assert horizon < negative_days.min()
+    assert (combined.loc[combined.index <= horizon, "cumulative_net_liquidity_try_mn"] >= 0).all()
