@@ -114,6 +114,14 @@ The data classes are never blended silently:
 | [`artifacts/figures`](artifacts/figures) | Reproducible management visuals |
 | [`docs`](docs) | Methodology, provenance, validation, risk register and ALCO playbook |
 
+> **Deliverable freshness.** The workbook, deck and PDF report are hand-built snapshots from
+> before the EVE (#18) and survival-horizon (#21) corrections, and no script regenerates them.
+> They still show the superseded figures: combined-stress survival **30 days, within the floor**
+> (now **27 days, a breach**), rapid-run survival **7 days** (now **5**), worst EVE loss
+> **13.7%** of Tier 1 (now **13.9%**), and FX as the **only** formal breach (now **two**: FX and
+> combined survival). `artifacts/results/` and this README are authoritative. Each regeneration
+> is checked against them in CI.
+
 Power BI assets are intentionally source-controlled as transparent DAX, theme and dashboard specifications. The repository does not claim that an unverified `.pbix` or `.pbip` file has been rendered.
 
 ## Quick start

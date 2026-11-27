@@ -80,6 +80,14 @@ Kaynaklar ve sınıflandırmalar [veri kökeni dokümanında](docs/data_provenan
 | [SQL katmanı](sql) | Şema, view ve analitik sorgular |
 | [Yöntem ve yönetişim](docs) | Metodoloji, doğrulama, risk kaydı ve ALCO playbook |
 
+> **Teslimat güncelliği.** Excel, sunum ve PDF rapor; EVE (#18) ve hayatta kalma süresi (#21)
+> düzeltmelerinden önce elle hazırlanmış anlık görüntülerdir ve onları yeniden üreten bir
+> betik yoktur. Bu dosyalarda eski değerler görünür: birleşik streste hayatta kalma **30 gün,
+> sınır içinde** (güncel: **27 gün, ihlal**), hızlı dijital kaçışta **7 gün** (güncel: **5**),
+> en kötü EVE kaybı Tier 1'in **%13,7**'si (güncel: **%13,9**) ve tek resmî ihlal olarak FX
+> (güncel: FX ve birleşik stres hayatta kalma, **iki** ihlal). Geçerli değerler
+> `artifacts/results/` ve README'dedir; CI her yeniden üretimi bunlarla karşılaştırır.
+
 ## Kurulum ve çalıştırma
 
 Python 3.11 veya üzeri gerekir.
